@@ -4,6 +4,7 @@ import Footer from "./components/Footer";
 import HomePage from "./components/HomePage";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import UserLoginComp from "./components/UserLoginComp";
+import SellerLoginComp from "./components/SellerLoginComp";
 
 function App() {
   return (
@@ -18,9 +19,7 @@ function App() {
                   </Route>
                   <Route exact path="/usersignin" component={UserLoginComp}>
                   </Route>
-                  {/*<Route path="/dashboard">*/}
-                  {/*    <Dashboard />*/}
-                  {/*</Route>*/}
+                  <Route exact path="/sellersignin" component={SellerLoginComp}></Route>
               </Switch>
 
 

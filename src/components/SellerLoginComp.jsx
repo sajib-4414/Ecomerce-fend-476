@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import '../css/userlogin.css'
-class UserLoginComp extends Component{
+class SellerLoginComp extends Component{
     render() {
         return(
             <div id="login">
@@ -10,7 +10,7 @@ class UserLoginComp extends Component{
                         <div id="login-column" className="col-md-6">
                             <div id="login-box" className="col-md-12">
                                 <form id="login-form" className="form" action="" method="post">
-                                    <h3 className="text-center text-info">Consumers Login Here: </h3>
+                                    <h3 className="text-center text-info">Login for Seller</h3>
                                     <div className="form-group">
                                         <label htmlFor="username" className="text-info">Username:</label><br/>
                                         <input type="text" name="username" id="username" className="form-control"></input>
@@ -35,7 +35,7 @@ class UserLoginComp extends Component{
                     </div>
                 </div>
             </div>
-            );
+        );
     }
 }
-export default UserLoginComp
+export default SellerLoginComp

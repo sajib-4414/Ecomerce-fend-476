@@ -24,7 +24,11 @@ class NavComp extends Component{
                         <Dropdown.Item >
                             <Link to="/usersignin">User sign in</Link>
                             </Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">Seller sign in</Dropdown.Item>
+                        <Dropdown.Item href="#/action-2">
+                            <Link to="/sellersignin">
+                            Seller sign in
+                            </Link>
+                            </Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
