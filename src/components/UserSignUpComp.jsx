@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import '../css/usersignup.css'
+import {Link} from "react-router-dom";
 class UserSignUpComp extends Component{
     render() {
         return(
@@ -72,7 +73,7 @@ class UserSignUpComp extends Component{
                                 <button type="button" className="btn btn-primary btn-lg btn-block login-button">Register</button>
                             </div>
                             <div className="login-register">
-                                <a href="index.php">Login</a>
+                                <Link  to="/usersignin">Login</Link>
                             </div>
                         </form>
                     </div>

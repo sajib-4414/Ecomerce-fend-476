@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import '../css/userlogin.css'
+import {Link} from "react-router-dom";
 class SellerLoginComp extends Component{
     render() {
         return(
@@ -27,7 +28,7 @@ class SellerLoginComp extends Component{
                                                value="submit"/>
                                     </div>
                                     <div id="register-link" className="text-right">
-                                        <a href="#" className="">Register here</a>
+                                        <Link  to="/sellerregister">Register here as a seller </Link>
                                     </div>
                                 </form>
                             </div>

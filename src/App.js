@@ -6,6 +6,7 @@ import {BrowserRouter, Route, Switch} from "react-router-dom";
 import UserLoginComp from "./components/UserLoginComp";
 import SellerLoginComp from "./components/SellerLoginComp";
 import UserSignUpComp from "./components/UserSignUpComp";
+import SellerRegisterComp from "./components/SellerRegisterComp";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                   <Route exact path="/usersignin" component={UserLoginComp}/>
                   <Route exact path="/sellersignin" component={SellerLoginComp}/>
                   <Route exact path="/userregister" component={UserSignUpComp}/>
+                  <Route exact path="/sellerregister" component={SellerRegisterComp}/>
               </Switch>
 
 
