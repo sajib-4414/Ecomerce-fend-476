@@ -12,7 +12,7 @@ class UserSignUpComp extends Component{
                         <form className="form-horizontal" method="post" action="#">
 
                             <div className="form-group">
-                                <label htmlFor="name" className="cols-sm-2 control-label">Your Name</label>
+                                <label htmlFor="name" className="cols-sm-2 control-label">Your Full Name</label>
                                 <div className="cols-sm-10">
                                     <div className="input-group">
                             <span className="input-group-addon"><i className="fa fa-user fa"
