@@ -1,10 +1,11 @@
 import './css/App.css';
 import NavComp from './components/NavComp'
 import Footer from "./components/Footer";
-import HomePage from "./components/HomePage";
+import HomePageComp from "./components/HomePageComp";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import UserLoginComp from "./components/UserLoginComp";
 import SellerLoginComp from "./components/SellerLoginComp";
+import UserSignUpComp from "./components/UserSignUpComp";
 
 function App() {
   return (
@@ -14,12 +15,10 @@ function App() {
       <div className="container">
 
               <Switch>
-                  <Route exact path="/" component={HomePage}>
-
-                  </Route>
-                  <Route exact path="/usersignin" component={UserLoginComp}>
-                  </Route>
-                  <Route exact path="/sellersignin" component={SellerLoginComp}></Route>
+                  <Route exact path="/" component={HomePageComp}/>
+                  <Route exact path="/usersignin" component={UserLoginComp}/>
+                  <Route exact path="/sellersignin" component={SellerLoginComp}/>
+                  <Route exact path="/userregister" component={UserSignUpComp}/>
               </Switch>
 
 
