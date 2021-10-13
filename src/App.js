@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './App.css';
+import './css/App.css';
 
 function App() {
   return (
@@ -76,8 +75,8 @@ function App() {
         <footer className="pt-4 my-md-5 pt-md-5 border-top">
           <div className="row">
             <div className="col-12 col-md">
-              <img className="mb-2" src="./Pricing example for Bootstrap_files/bootstrap-solid.svg" alt="" width="24"
-                   height="24"/>
+              {/*<img className="mb-2" src="./images/bootstrap-solid.svg" alt="" width="24"*/}
+              {/*     height="24"/>*/}
                 <small className="d-block mb-3 text-muted">© 2017-2018</small>
             </div>
             <div className="col-6 col-md">
@@ -124,18 +123,6 @@ function App() {
           </div>
         </footer>
       </div>
-
-
-       {/*Bootstrap core JavaScript*/}
-      {/*================================================== */}
-       {/*Placed at the end of the document so the pages load faster */}
-       {/* <script>*/}
-       {/*   Holder.addTheme('thumb', {*/}
-       {/*   bg: '#55595c',*/}
-       {/*   fg: '#eceeef',*/}
-       {/*   text: 'Thumbnail'*/}
-       {/* });*/}
-       {/* </script>*/}
         
       </body>
     </div>
