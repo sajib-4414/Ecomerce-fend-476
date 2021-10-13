@@ -22,7 +22,7 @@ class NavComp extends Component{
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item >
-                            <Link to="/about">User sign in</Link>
+                            <Link to="/usersignin">User sign in</Link>
                             </Dropdown.Item>
                         <Dropdown.Item href="#/action-2">Seller sign in</Dropdown.Item>
                     </Dropdown.Menu>
