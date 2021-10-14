@@ -9,6 +9,7 @@ import UserSignUpComp from "./components/UserSignUpComp";
 import SellerRegisterComp from "./components/SellerRegisterComp";
 import ProductListForSellerComp from "./components/ProductListForSellerComp";
 import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
+import CheckoutPageComp from "./components/CheckoutPageComp";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                   <Route exact path="/sellerregister" component={SellerRegisterComp}/>
                   <Route exact path="/productlistforseller" component={ProductListForSellerComp}/>
                   <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
+                  <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
               </Switch>
 
 
