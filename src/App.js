@@ -13,6 +13,8 @@ import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
+import SellerProductsListToBuyForUserComp from "./components/SellerProductsListToBuyForUserComp";
+import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
                   <Route exact path="/addproduct" component={AddProductForSeller}/>
                   <Route exact path="/addcompany" component={AddCompanyComp}/>
                   <Route exact path="/shoppingcart" component={ShoppingCartComp}/>
+                  <Route exact path="/productlistbyseller" component={SellerProductsListToBuyForUserComp}/>
+                  <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
               </Switch>
 
 
