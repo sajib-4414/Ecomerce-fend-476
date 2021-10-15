@@ -11,6 +11,7 @@ import ProductListForSellerComp from "./components/ProductListForSellerComp";
 import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
 import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
+import AddCompanyComp from "./components/AddCompanyComp";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
                   <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
                   <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                   <Route exact path="/addproduct" component={AddProductForSeller}/>
+                  <Route exact path="/addcompany" component={AddCompanyComp}/>
               </Switch>
 
 

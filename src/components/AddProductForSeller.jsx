@@ -75,9 +75,6 @@ class AddProductForSeller extends Component{
 
                             </div>
 
-
-
-
                             <button className="btn btn-primary btn-lg btn-block" type="submit">Confirm and Add Product
                             </button>
                         </form>
