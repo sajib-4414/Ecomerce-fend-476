@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import '../css/sellerproductlist.css'
+import axios from "axios";
 
 class SellerProductsListToBuyForUserComp extends Component{
+    state = {
+        sellerProducts: []
+    }
+    componentDidMount() {
+        axios
+            .get("https://jsonplaceholder.typicode.com/todos?_limit=10")
+            .then(val => this.setState({todos:val.data}))
+    }
     render() {
         return(
             <div className="row">
