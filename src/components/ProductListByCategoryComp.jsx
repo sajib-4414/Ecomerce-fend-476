@@ -22,7 +22,7 @@ class ProductListByCategoryComp extends Component{
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td>Product Devlopment</td>
+                                        <td>Product Development</td>
                                         <td><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
                                                  className="thumb-sm rounded-circle mr-2"/> Kevin Heal</td>
 
