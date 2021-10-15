@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import BannerComp from "./BannerComp";
 import ProductListComp from "./ProductListComp";
 
-class HomePage extends Component{
+class HomePageComp extends Component{
     render() {
         return(
             <React.Fragment>
@@ -12,4 +12,4 @@ class HomePage extends Component{
         );
     }
 }
-export default HomePage
+export default HomePageComp
