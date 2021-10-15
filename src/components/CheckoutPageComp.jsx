@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import '../css/usercheckout-form-validation.css'
+import Select from 'react-select'
 
 class CheckoutPageComp extends Component{
+    options = [
+        { value: 'createnew', label: 'Create New' },
+        { value: 'address1', label: 'Address1' },
+        { value: 'address2', label: 'Address2' }
+    ]
     render() {
         return(
             <div className="width-shrink">
@@ -39,19 +45,12 @@ class CheckoutPageComp extends Component{
                             </li>
 
                             <li className="list-group-item d-flex justify-content-between">
-                                <span>Total (USD)</span>
+                                <span>Total (CAD)</span>
                                 <strong>$20</strong>
                             </li>
                         </ul>
 
-                        <form className="card p-2">
-                            <div className="input-group">
-                                <input type="text" className="form-control" placeholder="Promo code"/>
-                                    <div className="input-group-append">
-                                        <button type="submit" className="btn btn-secondary">Redeem</button>
-                                    </div>
-                            </div>
-                        </form>
+
                     </div>
                     <div className="col-md-8 order-md-1">
                         <h4 className="mb-3">Billing address</h4>
@@ -84,15 +83,18 @@ class CheckoutPageComp extends Component{
                                     </div>
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="email">Contact Number </label>
-                                <input type="email" className="form-control" id="email" placeholder="you@example.com"/>
+                                <label >Contact Number </label>
+                                <input type="text" className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
                                 <div className="invalid-feedback">
-                                    Please enter a valid email address for shipping updates.
+                                    Please enter a valid contact number for shipping updates.
                                 </div>
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="address">Address</label>
+                                <label htmlFor="address">Choose an address or create new</label>
+
+                                <Select options={this.options} />
+                                <br/>
                                 <input type="text" className="form-control" id="address" placeholder="1234 Main St"
                                        required=""/>
                                     <div className="invalid-feedback">
@@ -101,7 +103,7 @@ class CheckoutPageComp extends Component{
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="address2">Address 2 <span
+                                <label htmlFor="address2">Address line 2 <span
                                     className="text-muted">(Optional)</span></label>
                                 <input type="text" className="form-control" id="address2"
                                        placeholder="Apartment or suite"/>
