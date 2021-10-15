@@ -15,6 +15,7 @@ import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
 import SellerProductsListToBuyForUserComp from "./components/SellerProductsListToBuyForUserComp";
 import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
+import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
                   <Route exact path="/shoppingcart" component={ShoppingCartComp}/>
                   <Route exact path="/productlistbyseller" component={SellerProductsListToBuyForUserComp}/>
                   <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
+                  <Route exact path="/productlistbycategory" component={ProductListByCategoryComp}/>
               </Switch>
 
 
