@@ -20,15 +20,15 @@ class NavComp extends Component{
                     <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
                     <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
                     {this.props.cartitemquantity>0?
-                        <button type="button" className="btn btn-info" data-toggle="dropdown">
+                        <Link className="btn" to="shoppingcart">
                             <i className="fa fa-shopping-cart"></i> Cart <span
 
                             className="badge badge-pill badge-danger">{this.props.cartitemquantity}</span>
-                        </button>
+                        </Link>
                         :
-                        <button type="button" className="btn btn-info" data-toggle="dropdown">
+                        <Link className="btn" to="shoppingcart">
                             <i className="fa fa-shopping-cart"></i> Cart
-                        </button>
+                        </Link>
                     }
 
                 </nav>

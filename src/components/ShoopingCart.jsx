@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 class ShoppingCartComp extends Component{
+
     render() {
         return(
             <div className="container">
