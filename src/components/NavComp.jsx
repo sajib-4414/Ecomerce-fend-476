@@ -21,7 +21,7 @@ class NavComp extends Component{
                     <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
                     <button type="button" className="btn btn-info" data-toggle="dropdown">
                         <i className="fa fa-shopping-cart"></i> Cart <span
-                        className="badge badge-pill badge-danger">3</span>
+                        className="badge badge-pill badge-danger">{this.props.cartitemquantity}</span>
                         {/*<i className="fa fa-shopping-cart" aria-hidden="true"></i> */}
                     </button>
                 </nav>
