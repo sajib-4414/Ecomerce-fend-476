@@ -38,6 +38,7 @@ class ShoppingCartComp extends Component{
                             <tbody>
                             <ShoppingCartItemsComp
                             cartLines = {this.props.initialCartLines}
+                            notifyShoppingCart={this.props.notifyAppJSToUpdateCart}
                             />
 
                             {/*<tr>*/}

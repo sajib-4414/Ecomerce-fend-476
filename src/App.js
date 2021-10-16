@@ -24,12 +24,7 @@ class App extends Component{
         cart: {},
         cartLines:[]
     }
-    setCartDataInState = response =>{
-        const datacart = response.data
-        const datacartlines = response.data.cartlines
-        this.setState({cart:datacart,cartLines:datacartlines})
-    }
-    componentDidMount() {
+    callCartCarLinesApiAndUpdateState(){
         axios
             .get(global.config.bkend.url+"/cart-carlines-by-user/1/")
             .then(response =>
@@ -38,6 +33,14 @@ class App extends Component{
                 }
 
             )
+    }
+    setCartDataInState = response =>{
+        const datacart = response.data
+        const datacartlines = response.data.cartlines
+        this.setState({cart:datacart,cartLines:datacartlines})
+    }
+    componentDidMount() {
+        this.callCartCarLinesApiAndUpdateState()
     }
     handleAddToCartProduct(pk){
         // alert("Hi I finally got the product id"+pk)
@@ -60,6 +63,9 @@ class App extends Component{
             count = count + item.quantity
         });
         return count
+    }
+    updateCart = ()=>{
+        this.callCartCarLinesApiAndUpdateState()
     }
     render() {
         return (
@@ -85,6 +91,7 @@ class App extends Component{
                                    render={(props) => (
                                        <ShoppingCartComp
                                            initialCartLines={this.state.cartLines}
+                                           notifyAppJSToUpdateCart={this.updateCart.bind(this)}
                                        />)} />
                             <Route exact path="/productlistbyseller"
                                    render={(props) => (

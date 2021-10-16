@@ -9,6 +9,7 @@ class ShoppingCartItemsComp extends Component{
             this.props.cartLines.map(item => (
                 <ShoppingCartRowComp
                     cartline={item}
+                    notifyCartItemListComp={this.props.notifyShoppingCart}
                     // handleCartAdd={this.handleAddingToCartToListComp.bind(this)}
 
                     // xyz={this.props.delTodo}
