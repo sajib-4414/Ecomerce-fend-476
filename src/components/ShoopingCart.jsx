@@ -1,6 +1,24 @@
 import React, { Component } from "react";
+import axios from "axios";
+import ShoppingCartItemsComp from "./ShoppingCartItemsComp";
 
 class ShoppingCartComp extends Component{
+    state = {
+        carlines: this.props.initialCartLines
+    }
+
+    componentDidMount() {
+        axios
+            .get(global.config.bkend.url+"/products/")
+            .then(val =>
+                {
+                    this.setState({sellerProducts:val.data})
+                    console.log(val)
+                }
+
+            )
+
+    }
 
     render() {
         return(
@@ -18,56 +36,35 @@ class ShoppingCartComp extends Component{
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td className="col-sm-8 col-md-6">
-                                    <div className="media">
-                                        <a className="thumbnail pull-left" href="#"> <img className="media-object"
-                                                                                          src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png"
-                                                                                          style={{width: "72px", height: "72px",marginRight:'10px'}}/>
-                                        </a>
-                                        <div className="media-body">
-                                            <h4 className="media-heading"><a href="#">Product name</a></h4>
-                                            <h5 className="media-heading"> by <a href="#">Brand name</a></h5>
+                            <ShoppingCartItemsComp
+                            cartLines = {this.props.initialCartLines}
+                            />
 
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="col-sm-1 col-md-1" style={{textAlign: "center"}}>
-                                    <input type="number" className="form-control" id="exampleInputEmail1"/>
-                                </td>
-                                <td className="col-sm-1 col-md-1 text-center"><strong>$4.87</strong></td>
-                                <td className="col-sm-1 col-md-1 text-center"><strong>$14.61</strong></td>
-                                <td className="col-sm-1 col-md-1">
-                                    <button type="button" className="btn btn-danger">
-                                        <span className="glyphicon glyphicon-remove"></span> Remove
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td className="col-md-6">
-                                    <div className="media">
-                                        <a className="thumbnail pull-left" href="#"> <img className="media-object"
-                                                                                          src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png"
-                                                                                          style={{width: '72px', height: '72px', marginRight:'10px'}}/>
-                                        </a>
-                                        <div className="media-body">
-                                            <h4 className="media-heading"><a href="#">Product name</a></h4>
-                                            <h5 className="media-heading"> by <a href="#">Brand name</a></h5>
+                            {/*<tr>*/}
+                            {/*    <td className="col-md-6">*/}
+                            {/*        <div className="media">*/}
+                            {/*            <a className="thumbnail pull-left" href="#"> <img className="media-object"*/}
+                            {/*                                                              src="http://icons.iconarchive.com/icons/custom-icon-design/flatastic-2/72/product-icon.png"*/}
+                            {/*                                                              style={{width: '72px', height: '72px', marginRight:'10px'}}/>*/}
+                            {/*            </a>*/}
+                            {/*            <div className="media-body">*/}
+                            {/*                <h4 className="media-heading"><a href="#">Product name</a></h4>*/}
+                            {/*                <h5 className="media-heading"> by <a href="#">Brand name</a></h5>*/}
 
-                                        </div>
-                                    </div>
-                                </td>
-                                <td className="col-md-1" style={{textAlign: 'center'}}>
-                                    <input type="number" className="form-control" id="exampleInputEmail1"/>
-                                </td>
-                                <td className="col-md-1 text-center"><strong>$4.99</strong></td>
-                                <td className="col-md-1 text-center"><strong>$9.98</strong></td>
-                                <td className="col-md-1">
-                                    <button type="button" className="btn btn-danger">
-                                        <span className="glyphicon glyphicon-remove"></span> Remove
-                                    </button>
-                                </td>
-                            </tr>
+                            {/*            </div>*/}
+                            {/*        </div>*/}
+                            {/*    </td>*/}
+                            {/*    <td className="col-md-1" style={{textAlign: 'center'}}>*/}
+                            {/*        <input type="number" className="form-control" id="exampleInputEmail1"/>*/}
+                            {/*    </td>*/}
+                            {/*    <td className="col-md-1 text-center"><strong>$4.99</strong></td>*/}
+                            {/*    <td className="col-md-1 text-center"><strong>$9.98</strong></td>*/}
+                            {/*    <td className="col-md-1">*/}
+                            {/*        <button type="button" className="btn btn-danger">*/}
+                            {/*            <span className="glyphicon glyphicon-remove"></span> Remove*/}
+                            {/*        </button>*/}
+                            {/*    </td>*/}
+                            {/*</tr>*/}
                             <tr>
                                 <td></td>
                                 <td></td>

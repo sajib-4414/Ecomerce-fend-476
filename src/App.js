@@ -81,7 +81,11 @@ class App extends Component{
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addproduct" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
-                            <Route exact path="/shoppingcart" component={ShoppingCartComp}/>
+                            <Route exact path="/shoppingcart"
+                                   render={(props) => (
+                                       <ShoppingCartComp
+                                           initialCartLines={this.state.cartLines}
+                                       />)} />
                             <Route exact path="/productlistbyseller"
                                    render={(props) => (
                                        <SellerProductsListToBuyForUserComp
