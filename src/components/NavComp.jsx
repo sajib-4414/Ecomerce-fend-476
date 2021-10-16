@@ -19,11 +19,18 @@ class NavComp extends Component{
                     <Link className='p-2 text-dark' to="/productlistbycategory">Tech Products</Link>
                     <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
                     <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
-                    <button type="button" className="btn btn-info" data-toggle="dropdown">
-                        <i className="fa fa-shopping-cart"></i> Cart <span
-                        className="badge badge-pill badge-danger">{this.props.cartitemquantity}</span>
-                        {/*<i className="fa fa-shopping-cart" aria-hidden="true"></i> */}
-                    </button>
+                    {this.props.cartitemquantity>0?
+                        <button type="button" className="btn btn-info" data-toggle="dropdown">
+                            <i className="fa fa-shopping-cart"></i> Cart <span
+
+                            className="badge badge-pill badge-danger">{this.props.cartitemquantity}</span>
+                        </button>
+                        :
+                        <button type="button" className="btn btn-info" data-toggle="dropdown">
+                            <i className="fa fa-shopping-cart"></i> Cart
+                        </button>
+                    }
+
                 </nav>
                 <Dropdown>
                     <Dropdown.Toggle variant="primary" id="dropdown-basic">
