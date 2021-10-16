@@ -21,6 +21,10 @@ class SellerProductsListToBuyForUserComp extends Component{
             )
 
     }
+    handleDataPropagation(pk){
+        //alert(" I am from seller comp with pk="+pk)
+        this.props.handleAddToCartToAppJS(pk)
+    }
     render() {
         return(
             <div className="row">
@@ -42,6 +46,7 @@ class SellerProductsListToBuyForUserComp extends Component{
                                     <tbody>
                                     <ProductListBySellerSubComp
                                     products={this.state.sellerProducts}
+                                    handleCartAddToParent = { this.handleDataPropagation.bind(this)}
                                     />
 
                                     </tbody>

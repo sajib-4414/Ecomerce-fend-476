@@ -24,24 +24,49 @@ class App extends Component{
         cart: {},
         cartLines:[]
     }
+    setCartDataInState = response =>{
+        const datacart = response.data
+        const datacartlines = response.data.cartlines
+        this.setState({cart:datacart,cartLines:datacartlines})
+    }
     componentDidMount() {
         axios
             .get(global.config.bkend.url+"/cart-carlines-by-user/1/")
-            .then(val =>
+            .then(response =>
                 {
-                    const datacart = val.data
-                    const datacartlines = val.data.cartlines
-                    this.setState({cart:datacart,cartLines:datacartlines})
+                    this.setCartDataInState(response)
                 }
 
             )
+    }
+    handleAddToCartProduct(pk){
+        // alert("Hi I finally got the product id"+pk)
+        axios
+            .post(global.config.bkend.url+"/add-to-cart-user/", {
+                user_id:1,
+                product_id: pk
+            })
+            .then(response => {
+                console.log(response);
+                this.setCartDataInState(response)
+                // this.setState({todos:[...this.state.todos,res.data]})
+            });
+    }
+
+    getItemQuantity(){
+        const items = this.state.cartLines
+        let count = 0
+        items.forEach(function (item, index) {
+            count = count + item.quantity
+        });
+        return count
     }
     render() {
         return (
             <BrowserRouter>
                 <div className="App">
                     <NavComp
-                    cartitemquantity = {this.state.cartLines.length}
+                    cartitemquantity = {this.getItemQuantity()}
                     />
                     <div className="container">
 
@@ -57,7 +82,11 @@ class App extends Component{
                             <Route exact path="/addproduct" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
                             <Route exact path="/shoppingcart" component={ShoppingCartComp}/>
-                            <Route exact path="/productlistbyseller" component={SellerProductsListToBuyForUserComp}/>
+                            <Route exact path="/productlistbyseller"
+                                   render={(props) => (
+                                       <SellerProductsListToBuyForUserComp
+                                           handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
+                                   />)} />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
                             <Route exact path="/productlistbycategory" component={ProductListByCategoryComp}/>
                         </Switch>
