@@ -4,20 +4,53 @@ import ShoppingCartItemsComp from "./ShoppingCartItemsComp";
 
 class ShoppingCartComp extends Component{
     state = {
-        carlines: this.props.initialCartLines
+        carlines: this.props.initialCartLines,
+        subtotal:this.getSubTotalPrice(this.props.initialCartLines),
+        shipping:this.getShippingCost(this.props.initialCartLines),
+        finaltotal:this.getSubTotalPrice(this.props.initialCartLines) + this.getShippingCost(this.props.initialCartLines)
     }
-
-    componentDidMount() {
+    getSubTotalPrice(cartLines){
+        // this.state.cartLineItem.product.price,this.state.cartLineItem.quantity
+        // const cartLines = this.state.carlines
+        let subtotal = 0
+        cartLines.forEach(function (cartline, index) {
+            subtotal = subtotal + cartline.product.price*cartline.quantity
+        });
+        return subtotal
+    }
+    getShippingCost(cartLines){
+        // const cartLines = this.state.carlines
+        let totalShippingCost = 0
+        cartLines.forEach(function (cartline, index) {
+            totalShippingCost = totalShippingCost + cartline.product.delivery_cost
+        });
+        return totalShippingCost
+    }
+    getCartLines(){
         axios
-            .get(global.config.bkend.url+"/products/")
-            .then(val =>
+            .get(global.config.bkend.url+"/cart-carlines-by-user/1/")
+            .then(response =>
                 {
-                    this.setState({sellerProducts:val.data})
-                    console.log(val)
+                    // const datacart = response.data
+                    const datacartlines = response.data.cartlines
+                    this.setState({
+                        carlines:datacartlines,
+                        subtotal:this.getSubTotalPrice(datacartlines),
+                        shipping:this.getShippingCost(datacartlines),
+                        finaltotal:this.getShippingCost(datacartlines)+this.getSubTotalPrice(datacartlines)
+                    })
+
                 }
 
             )
+    }
+    componentDidMount() {
+        this.getCartLines();
 
+    }
+    handleItemChange = ()=>{
+        this.props.notifyAppJSToUpdateCart()
+        this.getCartLines();
     }
 
     render() {
@@ -38,7 +71,7 @@ class ShoppingCartComp extends Component{
                             <tbody>
                             <ShoppingCartItemsComp
                             cartLines = {this.props.initialCartLines}
-                            notifyShoppingCart={this.props.notifyAppJSToUpdateCart}
+                            notifyShoppingCart={this.handleItemChange}
                             />
 
                             {/*<tr>*/}
@@ -71,21 +104,21 @@ class ShoppingCartComp extends Component{
                                 <td></td>
                                 <td></td>
                                 <td><h5>Subtotal</h5></td>
-                                <td className="text-right"><h5><strong>$24.59</strong></h5></td>
+                                <td className="text-right"><h5><strong>${this.state.subtotal}</strong></h5></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td><h5>Estimated shipping</h5></td>
-                                <td className="text-right"><h5><strong>$6.94</strong></h5></td>
+                                <td className="text-right"><h5><strong>${this.state.shipping}</strong></h5></td>
                             </tr>
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td><h3>Total</h3></td>
-                                <td className="text-right"><h3><strong>$31.53</strong></h3></td>
+                                <td className="text-right"><h3><strong>${this.state.finaltotal}</strong></h3></td>
                             </tr>
                             <tr>
                                 <td></td>

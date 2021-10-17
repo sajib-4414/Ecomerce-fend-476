@@ -1,5 +1,4 @@
 import React, {Component} from "react"
-import ProductRowForProductListBySeller from "./ProductRowForProductListBySeller";
 import ShoppingCartRowComp from "./ShoppingCartRowComp";
 class ShoppingCartItemsComp extends Component{
 
