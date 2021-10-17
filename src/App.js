@@ -56,7 +56,7 @@ class App extends Component{
             });
     }
 
-    getItemQuantity(){
+    getTotalItemsQuantity(){
         const items = this.state.cartLines
         let count = 0
         items.forEach(function (item, index) {
@@ -72,7 +72,7 @@ class App extends Component{
             <BrowserRouter>
                 <div className="App">
                     <NavComp
-                    cartitemquantity = {this.getItemQuantity()}
+                    cartitemquantity = {this.getTotalItemsQuantity()}
                     />
                     <div className="container">
 

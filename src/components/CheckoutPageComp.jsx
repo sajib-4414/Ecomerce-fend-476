@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import '../css/usercheckout-form-validation.css'
 import Select from 'react-select'
 import axios from "axios";
+import CheckoutPageProductsListComp from "./CheckoutPageProductsListComp";
 
 class CheckoutPageComp extends Component{
     // options = [
@@ -13,9 +14,31 @@ class CheckoutPageComp extends Component{
         profile:{},
         address:{},
         cartlines:[],
+        totalPrice:0,
+        total_items:0,
         form_data:{
             contact_number:""
         }
+    }
+    getTotalPrice(cartlines){
+        let totalShippingCost = 0
+        cartlines.forEach(function (cartline, index) {
+            totalShippingCost = totalShippingCost + cartline.product.delivery_cost
+        });
+        let subtotal = 0
+        cartlines.forEach(function (cartline, index) {
+            subtotal = subtotal + cartline.product.price*cartline.quantity
+        });
+        return totalShippingCost+subtotal
+
+    }
+    getTotalItemsQuantity(cartLines){
+        // const items = this.state.cartLines
+        let count = 0
+        cartLines.forEach(function (item, index) {
+            count = count + item.quantity
+        });
+        return count
     }
     async componentDidMount() {
         const [profileResponse, cartLinesResponse] = await Promise.all([
@@ -27,7 +50,9 @@ class CheckoutPageComp extends Component{
         this.setState({
             profile: profileResponse.data,
             address:profileResponse.data.address,
-            cartlines: cartLinesResponse.data.cartlines
+            cartlines: cartLinesResponse.data.cartlines,
+            totalPrice:this.getTotalPrice(cartLinesResponse.data.cartlines),
+            total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines)
         });
 
         // axios
@@ -60,34 +85,31 @@ class CheckoutPageComp extends Component{
                     <div className="col-md-4 order-md-2 mb-4">
                         <h4 className="d-flex justify-content-between align-items-center mb-3">
                             <span className="text-muted">Your cart</span>
-                            <span className="badge badge-secondary badge-pill">3</span>
+                            <span className="badge badge-secondary badge-pill">{this.state.total_items}</span>
                         </h4>
                         <ul className="list-group mb-3">
-                            <li className="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 className="my-0">Product name</h6>
-                                    <small className="text-muted">Brief description</small>
-                                </div>
-                                <span className="text-muted">$12</span>
-                            </li>
-                            <li className="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 className="my-0">Second product</h6>
-                                    <small className="text-muted">Brief description</small>
-                                </div>
-                                <span className="text-muted">$8</span>
-                            </li>
-                            <li className="list-group-item d-flex justify-content-between lh-condensed">
-                                <div>
-                                    <h6 className="my-0">Third item</h6>
-                                    <small className="text-muted">Brief description</small>
-                                </div>
-                                <span className="text-muted">$5</span>
-                            </li>
+                            <CheckoutPageProductsListComp
+                            cartLinesProp={this.state.cartlines}
+                            />
+
+                            {/*<li className="list-group-item d-flex justify-content-between lh-condensed">*/}
+                            {/*    <div>*/}
+                            {/*        <h6 className="my-0">Second product</h6>*/}
+                            {/*        <small className="text-muted">Brief description</small>*/}
+                            {/*    </div>*/}
+                            {/*    <span className="text-muted">$8</span>*/}
+                            {/*</li>*/}
+                            {/*<li className="list-group-item d-flex justify-content-between lh-condensed">*/}
+                            {/*    <div>*/}
+                            {/*        <h6 className="my-0">Third item</h6>*/}
+                            {/*        <small className="text-muted">Brief description</small>*/}
+                            {/*    </div>*/}
+                            {/*    <span className="text-muted">$5</span>*/}
+                            {/*</li>*/}
 
                             <li className="list-group-item d-flex justify-content-between">
                                 <span>Total (CAD)</span>
-                                <strong>$20</strong>
+                                <strong>${this.state.totalPrice}</strong>
                             </li>
                         </ul>
 

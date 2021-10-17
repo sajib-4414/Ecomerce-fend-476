@@ -134,9 +134,15 @@ class ShoppingCartComp extends Component{
 
                                 </td>
                                 <td>
-                                    <button type="button" className="btn btn-success">
-                                        Checkout <span className="glyphicon glyphicon-play"></span>
-                                    </button>
+                                    {/*<Link className="btn btn-default" to="/">*/}
+                                    {/*    <span className="glyphicon glyphicon-shopping-cart"></span> Continue Shopping*/}
+                                    {/*</Link>*/}
+                                    <Link className="btn btn-success" to="/checkoutpage">
+                                        <span className="glyphicon glyphicon-shopping-cart"></span> Checkout
+                                    </Link>
+                                    {/*<button type="button" className="btn btn-success">*/}
+                                    {/*    Checkout <span className="glyphicon glyphicon-play"></span>*/}
+                                    {/*</button>*/}
                                 </td>
                             </tr>
                             </tbody>
