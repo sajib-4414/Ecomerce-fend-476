@@ -1,13 +1,54 @@
 import React, { Component } from "react";
 import '../css/usercheckout-form-validation.css'
 import Select from 'react-select'
+import axios from "axios";
 
 class CheckoutPageComp extends Component{
-    options = [
-        { value: 'createnew', label: 'Create New' },
-        { value: 'address1', label: 'Address1' },
-        { value: 'address2', label: 'Address2' }
-    ]
+    // options = [
+    //     { value: 'createnew', label: 'Create New' },
+    //     { value: 'address1', label: 'Address1' },
+    //     { value: 'address2', label: 'Address2' }
+    // ]
+    state = {
+        profile:{},
+        address:{},
+        cartlines:[],
+        form_data:{
+            contact_number:""
+        }
+    }
+    async componentDidMount() {
+        const [profileResponse, cartLinesResponse] = await Promise.all([
+            axios.get(global.config.bkend.url+"/buyers/1/"),
+            axios.get(global.config.bkend.url+"/cart-carlines-by-user/1/")
+        ]);
+        console.log("printing profile response data")
+        console.log(profileResponse.data)
+        this.setState({
+            profile: profileResponse.data,
+            address:profileResponse.data.address,
+            cartlines: cartLinesResponse.data.cartlines
+        });
+
+        // axios
+        //     .get(global.config.bkend.url+"/buyers/1/")
+        //     .then(response =>
+        //         {
+        //             // const datacart = response.data
+        //             // const datacartlines = response.data.cartlines
+        //             // this.setState({
+        //             //     carlines:datacartlines,
+        //             //     subtotal:this.getSubTotalPrice(datacartlines),
+        //             //     shipping:this.getShippingCost(datacartlines),
+        //             //     finaltotal:this.getShippingCost(datacartlines)+this.getSubTotalPrice(datacartlines)
+        //             // })
+        //             this.setState()
+        //
+        //         }
+
+            //)
+    }
+
     render() {
         return(
             <div className="width-shrink">
@@ -58,15 +99,15 @@ class CheckoutPageComp extends Component{
                             <div className="row">
                                 <div className="col-md-6 mb-3">
                                     <label htmlFor="firstName">First name</label>
-                                    <input type="text" className="form-control" id="firstName" placeholder="" value=""
-                                           required=""/>
+                                    <input type="text" value={this.state.profile.first_name} className="form-control" id="firstName" placeholder=""
+                                           />
                                         <div className="invalid-feedback">
                                             Valid first name is required.
                                         </div>
                                 </div>
                                 <div className="col-md-6 mb-3">
                                     <label htmlFor="lastName">Last name</label>
-                                    <input type="text" className="form-control" id="lastName" placeholder="" value=""
+                                    <input type="text" className="form-control" id="lastName" placeholder="" value={this.state.profile.last_name}
                                            required=""/>
                                         <div className="invalid-feedback">
                                             Valid last name is required.
@@ -77,62 +118,68 @@ class CheckoutPageComp extends Component{
 
                             <div className="mb-3">
                                 <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
-                                <input type="email" className="form-control" id="email" placeholder="you@example.com"/>
+                                <input type="email" value={this.state.profile.email} className="form-control" id="email" placeholder="you@example.com"/>
                                     <div className="invalid-feedback">
                                         Please enter a valid email address for shipping updates.
                                     </div>
                             </div>
                             <div className="mb-3">
                                 <label >Contact Number </label>
-                                <input type="text" className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
+                                <input type="text" value ={this.state.form_data.contact_number} className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
                                 <div className="invalid-feedback">
                                     Please enter a valid contact number for shipping updates.
                                 </div>
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="address">Choose an address or create new</label>
+                                <label htmlFor="address">Create a new address</label>
 
-                                <Select options={this.options} />
+
+                                {/*<Select options={this.options} />*/}
                                 <br/>
-                                <input type="text" className="form-control" id="address" placeholder="1234 Main St"
+                                <label htmlFor="address2">Address Line</label>
+                                <input type="text" value={this.state.address.street_address} className="form-control" id="address" placeholder="1234 Main St"
                                        required=""/>
                                     <div className="invalid-feedback">
                                         Please enter your shipping address.
                                     </div>
                             </div>
 
-                            <div className="mb-3">
-                                <label htmlFor="address2">Address line 2 <span
-                                    className="text-muted">(Optional)</span></label>
-                                <input type="text" className="form-control" id="address2"
-                                       placeholder="Apartment or suite"/>
-                            </div>
+                            {/*<div className="mb-3">*/}
+                            {/*    <label htmlFor="address2">Address line 2 <span*/}
+                            {/*        className="text-muted">(Optional)</span></label>*/}
+                            {/*    <input type="text" className="form-control" id="address2"*/}
+                            {/*           placeholder="Apartment or suite"/>*/}
+                            {/*</div>*/}
 
                             <div className="row">
                                 <div className="col-md-5 mb-3">
-                                    <label htmlFor="country">Country</label>
-                                    <select className="custom-select d-block w-100" id="country" required="">
-                                        <option value="">Choose...</option>
-                                        <option>United States</option>
-                                    </select>
+                                    <label htmlFor="country">Province</label>
+                                    <input type="text" value={this.state.address.province} className="form-control" id="address" placeholder="1234 Main St"
+                                           required=""/>
+                                    {/*<select className="custom-select d-block w-100" id="country" required="">*/}
+                                    {/*    <option value="">Choose...</option>*/}
+                                    {/*    <option>United States</option>*/}
+                                    {/*</select>*/}
                                     <div className="invalid-feedback">
-                                        Please select a valid country.
+                                        Please select a valid province.
                                     </div>
                                 </div>
                                 <div className="col-md-4 mb-3">
-                                    <label htmlFor="state">State</label>
-                                    <select className="custom-select d-block w-100" id="state" required="">
-                                        <option value="">Choose...</option>
-                                        <option>California</option>
-                                    </select>
+                                    <label htmlFor="state">City</label>
+                                    <input type="text" value={this.state.address.city} className="form-control" id="address" placeholder="1234 Main St"
+                                           required=""/>
+                                    {/*<select className="custom-select d-block w-100" id="state" required="">*/}
+                                    {/*    <option value="">Choose...</option>*/}
+                                    {/*    <option>California</option>*/}
+                                    {/*</select>*/}
                                     <div className="invalid-feedback">
                                         Please provide a valid state.
                                     </div>
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <label htmlFor="zip">Zip</label>
-                                    <input type="text" className="form-control" id="zip" placeholder="" required=""/>
+                                    <input type="text" className="form-control" value={this.state.address.zipcode} id="zip" placeholder="" required=""/>
                                         <div className="invalid-feedback">
                                             Zip code required.
                                         </div>
