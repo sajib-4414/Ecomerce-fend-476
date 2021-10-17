@@ -10,17 +10,60 @@ class CheckoutPageComp extends Component{
     //     { value: 'address1', label: 'Address1' },
     //     { value: 'address2', label: 'Address2' }
     // ]
-    state = {
-        profile:{},
-        address:{},
-        cartlines:[],
-        totalPrice:0,
-        total_items:0,
-        total_shipping_cost:0,
-        form_data:{
-            contact_number:""
-        }
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            profile:{},
+            address:{},
+            cartlines:[],
+            totalPrice:0,
+            total_items:0,
+            total_shipping_cost:0,
+            form_data:{
+                billing_firstname:"",
+                billing_lastname:"",
+                billing_email:"",
+                billing_contact_number:"",
+                street_address:"",
+                city:"",
+                zipcode:"",
+                province:"",
+            },
+            form_errors:{
+                firstname_error:"",
+                lastname_error:"",
+                email_error:"",
+                contact_number_error:"",
+                form_total_error:""
+            }
+        };
     }
+    // state = {
+    //     profile:{},
+    //     address:{},
+    //     cartlines:[],
+    //     totalPrice:0,
+    //     total_items:0,
+    //     total_shipping_cost:0,
+    //     form_data:{
+    //         billing_firstname:"",
+    //         billing_lastname:"",
+    //         billing_email:"",
+    //         billing_contact_number:"",
+    //         street_address:"",
+    //         city:"",
+    //         zipcode:"",
+    //         province:"",
+    //     },
+    //     form_errors:{
+    //         firstname_error:"",
+    //         lastname_error:"",
+    //         email_error:"",
+    //         contact_number_error:"",
+    //         form_total_error:""
+    //     }
+    // }
     getTotalPrice(cartlines){
         let totalShippingCost = 0
         cartlines.forEach(function (cartline, index) {
@@ -49,6 +92,67 @@ class CheckoutPageComp extends Component{
         });
         return totalShippingCost
     }
+    setFormDataStates(profile, address){
+        this.setState({...this.state,form_data:{
+                billing_firstname:profile.first_name,
+                billing_lastname:profile.last_name,
+                billing_email:profile.email,
+                street_address:address.street_address,
+                city:address.city,
+                zipcode:address.zipcode,
+                province:address.province,
+                billing_contact_number:""
+            }})
+
+    }
+    handleChange =e =>{
+            this.setState({
+                form_data:{
+                    [e.target.name]:e.target.value
+                }
+            })
+        const val = e.target.value
+        const target = e.target.name
+        // console.log("Target is"+target+", value is "+val)
+        switch (target){
+            case 'billing_firstname':
+                if (val === ""){
+                    this.setState({form_errors:{...this.state.form_errors,firstname_error:"Valid first name is required."}})
+                }
+                else{
+                    this.setState({form_errors:{...this.state.form_errors, firstname_error:""}})
+                }
+                break;
+            case 'billing_lastname':
+                if (val === ""){
+                    this.setState({form_errors:{...this.state.form_errors, lastname_error:"Valid last name is required."}})
+                }
+                else{
+                    this.setState({form_errors:{...this.state.form_errors, lastname_error:""}})
+                }
+                break;
+            case 'billing_email':
+                if (val === ""){
+                    this.setState({form_errors:{...this.state.form_errors, email_error:"Please enter a valid email address for shipping updates."}})
+                }
+                else{
+                    this.setState({form_errors:{...this.state.form_errors, email_error:""}})
+                }
+                break;
+            case 'billing_contact_number':
+                if (val === ""){
+                    this.setState({form_errors:{...this.state.form_errors, contact_number_error:"Please enter a valid contact number for shipping updates."}})
+                }
+                else{
+                    this.setState({form_errors:{...this.state.form_errors, contact_number_error:""}})
+                }
+                break;
+
+        }
+
+
+
+    }
     async componentDidMount() {
         const [profileResponse, cartLinesResponse] = await Promise.all([
             axios.get(global.config.bkend.url+"/buyers/1/"),
@@ -64,26 +168,28 @@ class CheckoutPageComp extends Component{
             total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines),
             total_shipping_cost:this.getShippingCost(cartLinesResponse.data.cartlines)
         });
-
-        // axios
-        //     .get(global.config.bkend.url+"/buyers/1/")
-        //     .then(response =>
-        //         {
-        //             // const datacart = response.data
-        //             // const datacartlines = response.data.cartlines
-        //             // this.setState({
-        //             //     carlines:datacartlines,
-        //             //     subtotal:this.getSubTotalPrice(datacartlines),
-        //             //     shipping:this.getShippingCost(datacartlines),
-        //             //     finaltotal:this.getShippingCost(datacartlines)+this.getSubTotalPrice(datacartlines)
-        //             // })
-        //             this.setState()
-        //
-        //         }
-
-            //)
+        this.setFormDataStates(profileResponse.data,profileResponse.data.address)
     }
+    handleOrderSubmit(formEvent){
+        formEvent.preventDefault()
+        const validation_errors = this.state.form_errors
+        let isAnyErrorFound = false
+        for (var key in validation_errors) {
+            if (validation_errors.hasOwnProperty(key)) {
+                if (validation_errors[key]!=="")
+                {
+                    isAnyErrorFound = true;
+                    break
+                }
+                // console.log(key + " -> " + validation_errors[key]);
+            }
+        }
 
+        if(isAnyErrorFound){
+            this.setState({form_errors:{...this.state.form_errors, form_total_error:"Please correct all the errors before submit"}})
+        }
+        alert("submitted")
+    }
     render() {
         return(
             <div className="width-shrink">
@@ -126,51 +232,58 @@ class CheckoutPageComp extends Component{
                     </div>
                     <div className="col-md-8 order-md-1">
                         <h4 className="mb-3">Billing address</h4>
-                        <form className="needs-validation" noValidate="">
+                        <form className="needs-validation" onSubmit={this.handleOrderSubmit.bind(this)}>
                             <div className="row">
                                 <div className="col-md-6 mb-3">
                                     <label htmlFor="firstName">First name</label>
-                                    <input type="text" value={this.state.profile.first_name} className="form-control" id="firstName" placeholder=""
+                                    <input type="text" name="billing_firstname" value={this.state.form_data.billing_firstname} onChange={this.handleChange.bind(this)} className="form-control" id="firstName" placeholder=""
                                            />
-                                        <div className="invalid-feedback">
-                                            Valid first name is required.
+                                        <div name="error_firstname" className="small text-danger">
+                                            {this.state.form_errors.firstname_error}
                                         </div>
                                 </div>
                                 <div className="col-md-6 mb-3">
                                     <label htmlFor="lastName">Last name</label>
-                                    <input type="text" className="form-control" id="lastName" placeholder="" value={this.state.profile.last_name}
+                                    <input type="text" name="billing_lastname" className="form-control" id="lastName" placeholder="" onChange={this.handleChange.bind(this)} value={this.state.form_data.billing_lastname}
                                            required=""/>
-                                        <div className="invalid-feedback">
-                                            Valid last name is required.
-                                        </div>
+                                    <div name="error_lastname" className="small text-danger">
+                                        {this.state.form_errors.lastname_error}
+                                    </div>
+
                                 </div>
                             </div>
 
 
                             <div className="mb-3">
                                 <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
-                                <input type="email" value={this.state.profile.email} className="form-control" id="email" placeholder="you@example.com"/>
-                                    <div className="invalid-feedback">
-                                        Please enter a valid email address for shipping updates.
-                                    </div>
+                                <input type="email" name="billing_email"  onChange={this.handleChange.bind(this)} value={this.state.form_data.billing_email} className="form-control" id="email" placeholder="you@example.com"/>
+                                <div name="error_lastname" className="small text-danger">
+                                    {this.state.form_errors.email_error}
+                                </div>
+                                {/*<div className="invalid-feedback">*/}
+                                {/*        */}
+                                {/*    </div>*/}
                             </div>
                             <div className="mb-3">
                                 <label >Contact Number </label>
-                                <input type="text" value ={this.state.form_data.contact_number} className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
-                                <div className="invalid-feedback">
-                                    Please enter a valid contact number for shipping updates.
+                                <input type="text" name="billing_contact_number" onChange={this.handleChange.bind(this)} value ={this.state.form_data.billing_contact_number} className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
+                                <div name="error_contact_number" className="small text-danger">
+                                    {this.state.form_errors.contact_number_error}
                                 </div>
+                                {/*<div className="invalid-feedback">*/}
+                                {/*    */}
+                                {/*</div>*/}
                             </div>
 
                             <div className="mb-3">
-                                <label htmlFor="address">Create a new address</label>
+                                {/*<label htmlFor="address">Create a new address</label>*/}
 
 
                                 {/*<Select options={this.options} />*/}
                                 <br/>
-                                <label htmlFor="address2">Address Line</label>
-                                <input type="text" value={this.state.address.street_address} className="form-control" id="address" placeholder="1234 Main St"
-                                       required=""/>
+                                <label htmlFor="address2">Address</label>
+                                <input type="text" name="street_address" value={this.state.form_data.street_address} className="form-control" id="address" placeholder="1234 Main St"
+                                       disabled/>
                                     <div className="invalid-feedback">
                                         Please enter your shipping address.
                                     </div>
@@ -186,8 +299,8 @@ class CheckoutPageComp extends Component{
                             <div className="row">
                                 <div className="col-md-5 mb-3">
                                     <label htmlFor="country">Province</label>
-                                    <input type="text" value={this.state.address.province} className="form-control" id="address" placeholder="1234 Main St"
-                                           required=""/>
+                                    <input type="text" name="province" value={this.state.form_data.province} className="form-control" id="address" placeholder="1234 Main St"
+                                           disabled/>
                                     {/*<select className="custom-select d-block w-100" id="country" required="">*/}
                                     {/*    <option value="">Choose...</option>*/}
                                     {/*    <option>United States</option>*/}
@@ -198,8 +311,8 @@ class CheckoutPageComp extends Component{
                                 </div>
                                 <div className="col-md-4 mb-3">
                                     <label htmlFor="state">City</label>
-                                    <input type="text" value={this.state.address.city} className="form-control" id="address" placeholder="1234 Main St"
-                                           required=""/>
+                                    <input type="text" name="city" value={this.state.form_data.city} className="form-control" id="address" placeholder="1234 Main St"
+                                           disabled/>
                                     {/*<select className="custom-select d-block w-100" id="state" required="">*/}
                                     {/*    <option value="">Choose...</option>*/}
                                     {/*    <option>California</option>*/}
@@ -210,7 +323,7 @@ class CheckoutPageComp extends Component{
                                 </div>
                                 <div className="col-md-3 mb-3">
                                     <label htmlFor="zip">Zip</label>
-                                    <input type="text" className="form-control" value={this.state.address.zipcode} id="zip" placeholder="" required=""/>
+                                    <input type="text" name="zipcode" className="form-control" value={this.state.form_data.zipcode} id="zip" placeholder="" disabled/>
                                         <div className="invalid-feedback">
                                             Zip code required.
                                         </div>
@@ -220,8 +333,11 @@ class CheckoutPageComp extends Component{
                                     <h4 className="mb-3">Payment</h4> <span>Cash on Delivery (COD)</span>
 
                                     <hr className="mb-4"/>
-                                        <button className="btn btn-primary btn-lg btn-block" type="submit">Continue to
-                                            checkout
+                                <div name="error_firstname" className="text-danger text-center">
+                                    {this.state.form_errors.form_total_error}
+                                </div>
+                            <br/>
+                                        <button className="btn btn-primary btn-lg btn-block" type="submit">Confirm and place Order
                                         </button>
                         </form>
                     </div>
