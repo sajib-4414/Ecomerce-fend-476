@@ -23,8 +23,19 @@ class ShoppingCartRowComp extends Component {
                 // this.setState({todos:[...this.state.todos,res.data]})
             });
     }
-    handleItemSubtract = ()=>{
-
+    handleItemSubtract = (cartline_id, quantity)=>{
+        if (quantity == 1) return
+        axios
+            .put(global.config.bkend.url+"/cartlines/"+cartline_id+"/", {
+                quantity:quantity-1
+            })
+            .then(response => {
+                console.log(response);
+                this.setState({cartLineItem:response.data})
+                //now notify App.js
+                this.props.notifyCartItemListComp()
+                // this.setState({todos:[...this.state.todos,res.data]})
+            });
     }
 
 
@@ -58,7 +69,9 @@ class ShoppingCartRowComp extends Component {
                            style={{maxWidth:'40px',paddingLeft:'0px',paddingRight:'0px'}}
                            className="form-control text-center" id="exampleInputEmail1"/>
                         <button
-                            onClick={this.handleItemSubtract}
+                            onClick={()=>{
+                                this.handleItemSubtract(this.state.cartLineItem.pk, this.state.cartLineItem.quantity)
+                            }}
                             type="button" className="btn">
                             <i className="far fa-minus-square"></i>
                         </button>
