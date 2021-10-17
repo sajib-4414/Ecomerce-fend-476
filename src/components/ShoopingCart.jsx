@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 import ShoppingCartItemsComp from "./ShoppingCartItemsComp";
+import {Link} from "react-router-dom";
 
 class ShoppingCartComp extends Component{
     state = {
@@ -125,9 +126,12 @@ class ShoppingCartComp extends Component{
                                 <td></td>
                                 <td></td>
                                 <td>
-                                    <button type="button" className="btn btn-default">
+                                    <Link className="btn btn-default" to="/">
                                         <span className="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
-                                    </button>
+                                    </Link>
+
+
+
                                 </td>
                                 <td>
                                     <button type="button" className="btn btn-success">
