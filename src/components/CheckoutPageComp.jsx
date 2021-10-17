@@ -16,6 +16,7 @@ class CheckoutPageComp extends Component{
         cartlines:[],
         totalPrice:0,
         total_items:0,
+        total_shipping_cost:0,
         form_data:{
             contact_number:""
         }
@@ -40,6 +41,14 @@ class CheckoutPageComp extends Component{
         });
         return count
     }
+    getShippingCost(cartLines){
+        // const cartLines = this.state.carlines
+        let totalShippingCost = 0
+        cartLines.forEach(function (cartline, index) {
+            totalShippingCost = totalShippingCost + cartline.product.delivery_cost
+        });
+        return totalShippingCost
+    }
     async componentDidMount() {
         const [profileResponse, cartLinesResponse] = await Promise.all([
             axios.get(global.config.bkend.url+"/buyers/1/"),
@@ -52,7 +61,8 @@ class CheckoutPageComp extends Component{
             address:profileResponse.data.address,
             cartlines: cartLinesResponse.data.cartlines,
             totalPrice:this.getTotalPrice(cartLinesResponse.data.cartlines),
-            total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines)
+            total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines),
+            total_shipping_cost:this.getShippingCost(cartLinesResponse.data.cartlines)
         });
 
         // axios
@@ -92,13 +102,12 @@ class CheckoutPageComp extends Component{
                             cartLinesProp={this.state.cartlines}
                             />
 
-                            {/*<li className="list-group-item d-flex justify-content-between lh-condensed">*/}
-                            {/*    <div>*/}
-                            {/*        <h6 className="my-0">Second product</h6>*/}
-                            {/*        <small className="text-muted">Brief description</small>*/}
-                            {/*    </div>*/}
-                            {/*    <span className="text-muted">$8</span>*/}
-                            {/*</li>*/}
+                            <li className="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <h6 className="my-0">Shipping</h6>
+                                </div>
+                                <span className="text-muted">${this.state.total_shipping_cost}</span>
+                            </li>
                             {/*<li className="list-group-item d-flex justify-content-between lh-condensed">*/}
                             {/*    <div>*/}
                             {/*        <h6 className="my-0">Third item</h6>*/}
