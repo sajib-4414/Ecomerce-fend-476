@@ -172,23 +172,108 @@ class CheckoutPageComp extends Component{
     }
     handleOrderSubmit(formEvent){
         formEvent.preventDefault()
-        const validation_errors = this.state.form_errors
-        let isAnyErrorFound = false
-        for (var key in validation_errors) {
-            if (validation_errors.hasOwnProperty(key)) {
-                if (validation_errors[key]!=="")
-                {
-                    isAnyErrorFound = true;
-                    break
+
+
+        //check empty fields and forcefully assign errors
+        const all_form_data = this.state.form_data
+        let errors = {}
+        for (var key in all_form_data) {
+            if (all_form_data.hasOwnProperty(key)) {
+                switch (key){
+                    case 'billing_firstname':
+                        if (all_form_data[key] === ""){
+                            errors['firstname_error']= "Valid first name is required."
+                            // this.setState({form_errors:{...this.state.form_errors,firstname_error:"Valid first name is required.",form_total_error:"Please correct all the errors before submit"}})
+                            // isAnyErrorFound = true
+                        }
+                        break
+                        // else{
+                        //     this.setState({form_errors:{...this.state.form_errors, firstname_error:""}})
+                        // }
+                    case 'billing_lastname':
+                        if (all_form_data[key] === ""){
+                            errors['lastname_error']= "Valid last name is required."
+                        }
+                        break
+                        // if (all_form_data[key] === ""){
+                        //     this.setState({form_errors:{...this.state.form_errors, lastname_error:"Valid last name is required.", form_total_error:"Please correct all the errors before submit"}})
+                        //     isAnyErrorFound = true
+                        // }
+                        // else{
+                        //     this.setState({form_errors:{...this.state.form_errors, lastname_error:""}})
+                        // }
+
+                    case 'billing_email':
+                        if (all_form_data[key] === ""){
+                            errors['email_error']= "Please enter a valid email address for shipping updates."
+                        }
+                        break
+                        // if (all_form_data[key] === ""){
+                        //     this.setState({form_errors:{...this.state.form_errors, email_error:"Please enter a valid email address for shipping updates.", form_total_error:"Please correct all the errors before submit"}})
+                        //     isAnyErrorFound = true
+                        // }
+                        // else{
+                        //     this.setState({form_errors:{...this.state.form_errors, email_error:""}})
+                        // }
+
+                    case 'billing_contact_number':
+                        if (all_form_data[key] === ""){
+                            errors['contact_number_error']= "Please enter a valid contact number for shipping updates."
+                        }
+                        break
+                        // if (all_form_data[key] === ""){
+                        //     this.setState({form_errors:{...this.state.form_errors, contact_number_error:"Please enter a valid contact number for shipping updates.",form_total_error:"Please correct all the errors before submit"}})
+                        //
+                        //     // this.setState({form_errors:{...this.state.form_errors, form_total_error:"Please correct all the errors before submit"}})
+                        //
+                        //     // }
+                        //     // isAnyErrorFound = true
+                        // }
+                        // else{
+                        //     this.setState({form_errors:{...this.state.form_errors, contact_number_error:""}})
+                        // }
+
                 }
                 // console.log(key + " -> " + validation_errors[key]);
             }
         }
 
-        if(isAnyErrorFound){
-            this.setState({form_errors:{...this.state.form_errors, form_total_error:"Please correct all the errors before submit"}})
+
+        // const validation_errors = this.state.form_errors
+        let isAnyErrorFound = false
+        for (var key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                if (key !='form_total_error'){
+                    errors['form_total_error'] = 'Please correct all the errors before submitting'
+                    this.setState({...this.state,form_errors:{...this.state.form_errors,...errors}})
+                    isAnyErrorFound = true
+                    break
+                }
+
+
+                // if (errors[key]!=="")
+                // {
+                //     isAnyErrorFound = true;
+                //     break
+                // }
+                // console.log(key + " -> " + validation_errors[key]);
+            }
         }
-        alert("submitted")
+        // alert("submitted"+isAnyErrorFound)
+        if(isAnyErrorFound){
+            return
+        }
+        else {
+            this.setState({...this.state,form_errors:{form_total_error:""}})
+            //now submit the form
+        }
+
+        // if(isAnyErrorFound){
+        //     this.setState({form_errors:{...this.state.form_errors, form_total_error:"Please correct all the errors before submit"}})
+        //     return
+        // }
+
+
     }
     render() {
         return(
