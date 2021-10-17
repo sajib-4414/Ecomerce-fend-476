@@ -37,6 +37,17 @@ class ShoppingCartRowComp extends Component {
                 // this.setState({todos:[...this.state.todos,res.data]})
             });
     }
+    handleItemRemove = (cartline_id)=>{
+        axios
+            .delete(global.config.bkend.url+"/cartlines/"+cartline_id+"/", {})
+            .then(response => {
+                console.log(response);
+                // this.setState({cartLineItem:response.data})
+                //now notify App.js
+                this.props.notifyCartItemListComp()
+                // this.setState({todos:[...this.state.todos,res.data]})
+            });
+    }
 
 
     render (){
@@ -80,7 +91,11 @@ class ShoppingCartRowComp extends Component {
                 <td className="col-sm-1 col-md-1 text-center"><strong>${this.state.cartLineItem.product.price}</strong></td>
                 <td className="col-sm-1 col-md-1 text-center"><strong>${this.getTotalPrice(this.state.cartLineItem.product.price,this.state.cartLineItem.quantity)}</strong></td>
                 <td className="col-sm-1 col-md-1">
-                    <button type="button" className="btn btn-danger">
+                    <button
+                        onClick={()=>{
+                            this.handleItemRemove(this.state.cartLineItem.pk)
+                        }}
+                        type="button" className="btn btn-danger">
                         <span className="glyphicon glyphicon-remove"></span> Remove
                     </button>
                 </td>
