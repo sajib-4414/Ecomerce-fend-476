@@ -38,7 +38,7 @@ class OrderDetailsPage extends Component{
 
     render() {
         return(
-            <div className="card body-div">
+            <div className="card-order-details body-div">
                 <div className="title">Purchase Reciept</div>
                 <div className="info">
                     <div className="row">
@@ -60,7 +60,7 @@ class OrderDetailsPage extends Component{
                 <div className="total">
                     <div className="row">
                         <div className="col-9"></div>
-                        <div className="col-3"><big>£262.99</big></div>
+                        <div className="col-3"><big>$CA {this.state.order.value}</big></div>
                     </div>
                 </div>
                 <div className="tracking">
