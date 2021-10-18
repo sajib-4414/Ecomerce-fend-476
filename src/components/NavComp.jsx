@@ -16,10 +16,21 @@ class NavComp extends Component{
 
 
                     <Link className="p-2 text-dark" to="/">Home </Link>
-                    <a className="p-2 text-dark" href="https://getbootstrap.com/docs/4.0/examples/pricing/#">Features</a>
-                    <a className="p-2 text-dark" href="https://getbootstrap.com/docs/4.0/examples/pricing/#">Enterprise</a>
-                    <a className="p-2 text-dark" href="https://getbootstrap.com/docs/4.0/examples/pricing/#">Support</a>
-                    <a className="p-2 text-dark" href="https://getbootstrap.com/docs/4.0/examples/pricing/#">Pricing</a>
+                    <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
+                    <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
+                    <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
+                    {this.props.cartitemquantity>0?
+                        <Link className="btn" to="shoppingcart">
+                            <i className="fa fa-shopping-cart"></i> Cart <span
+
+                            className="badge badge-pill badge-danger">{this.props.cartitemquantity}</span>
+                        </Link>
+                        :
+                        <Link className="btn" to="shoppingcart">
+                            <i className="fa fa-shopping-cart"></i> Cart
+                        </Link>
+                    }
+
                 </nav>
                 <Dropdown>
                     <Dropdown.Toggle variant="primary" id="dropdown-basic">

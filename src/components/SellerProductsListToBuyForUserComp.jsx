@@ -1,7 +1,30 @@
 import React, { Component } from "react";
 import '../css/sellerproductlist.css'
+import axios from "axios";
+import ProductListBySellerSubComp from "./ProductListBySellerSubComp";
+import '../config';
 
 class SellerProductsListToBuyForUserComp extends Component{
+    state = {
+        sellerProducts: []
+    }
+    //static contextType =App.ThemeContext;
+    componentDidMount() {
+        axios
+            .get(global.config.bkend.url+"/products/")
+            .then(val =>
+            {
+                this.setState({sellerProducts:val.data})
+                console.log(val)
+            }
+
+            )
+
+    }
+    handleDataPropagation(pk){
+        //alert(" I am from seller comp with pk="+pk)
+        this.props.handleAddToCartToAppJS(pk)
+    }
     render() {
         return(
             <div className="row">
@@ -15,67 +38,17 @@ class SellerProductsListToBuyForUserComp extends Component{
                                     <tr className="align-self-center">
                                         <th>Product Name</th>
                                         <th>Company Name</th>
-
                                         <th>In Stock</th>
                                         <th>Item price</th>
                                         <th>Buy</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Product Devlopment</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Kevin Heal</td>
+                                    <ProductListBySellerSubComp
+                                    products={this.state.sellerProducts}
+                                    handleCartAddToParent = { this.handleDataPropagation.bind(this)}
+                                    />
 
-                                        <td><span className='text-success'><b>Yes</b></span></td>
-                                        <td>$15,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>New Office Building</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Frank M. Lyons</td>
-
-                                        <td><span className='text-danger'><b>No</b></span></td>
-                                        <td>$35,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Market Research</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Angelo Butler</td>
-
-                                        <td><span className='text-danger'><b>No</b></span></td>
-                                        <td>$45,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Website &amp; Blog</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Phillip Morse</td>
-
-                                        <td><span className='text-danger'><b>No</b></span></td>
-                                        <td>$70,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Product Devlopment</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Kevin Heal</td>
-
-                                        <td><span className='text-danger'><b>No</b></span></td>
-                                        <td>$15,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>New Office Building</td>
-                                        <td><img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt=""
-                                                 className="thumb-sm rounded-circle mr-2"/> Frank M. Lyons</td>
-
-                                        <td><span className='text-danger'><b>No</b></span></td>
-                                        <td>$35,000</td>
-                                        <td><button className='btn btn-secondary'>Add to Cart</button></td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
