@@ -6,6 +6,7 @@ class OrderDetailsPage extends Component{
     state = {
         orderId:this.props.match.params.id,
         order:{},
+        orderLines:[],
         totalShippingCost:0
     }
     getShippingCost(orderLines){
@@ -25,7 +26,8 @@ class OrderDetailsPage extends Component{
                 const orderlines = order.orderlines
                 this.setState({...this.state,
                     order:res.data,
-                    totalShippingCost:this.getShippingCost(orderlines)
+                    totalShippingCost:this.getShippingCost(orderlines),
+                    orderLines:orderlines
                 })
                 // alert("succeed creating orders")
                 // window.location.href = '/userpreviousorders';
