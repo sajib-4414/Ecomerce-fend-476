@@ -100,7 +100,7 @@ class App extends Component{
                                            handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
                                    />)} />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
-                            <Route exact path="/productlistbycategory" component={ProductListByCategoryComp}/>
+                            <Route exact path="/productlistbycategory/:category" component={ProductListByCategoryComp}/>
                             <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
                         </Switch>
 

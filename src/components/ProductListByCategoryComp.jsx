@@ -1,7 +1,20 @@
 import React, { Component } from "react";
 import '../css/sellerproductlist.css'
+import axios from "axios";
 
 class ProductListByCategoryComp extends Component{
+    state = {
+        categoryName:this.props.match.params.category,
+    }
+    componentDidMount() {
+        axios
+            .get(global.config.bkend.url + "/products/")
+            .then(val => {
+                    this.setState({sellerProducts: val.data})
+                    console.log(val)
+                }
+            )
+    }
     render() {
         return(
             <div className="row">
