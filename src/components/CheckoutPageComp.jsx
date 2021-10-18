@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import '../css/usercheckout-form-validation.css'
 import axios from "axios";
 import CheckoutPageProductsListComp from "./CheckoutPageProductsListComp";
+import { useHistory } from "react-router-dom";
 
 class CheckoutPageComp extends Component{
     empty_error_list = {
@@ -156,8 +157,12 @@ class CheckoutPageComp extends Component{
                     billing_contact_number:this.state.form_data.billing_contact_number
                 })
                 .then(res => {
-                    console.log(res);
-                    alert("succeed creating orders")
+                    // console.log(res);
+                    // alert("succeed creating orders")
+                    window.location.href = '/userpreviousorders';
+                    // let history = useHistory();
+                    // history.push("/userpreviousorders");
+                    // <Redirect to='/userpreviousorders'  />
 
                 });
             //now submit the form
