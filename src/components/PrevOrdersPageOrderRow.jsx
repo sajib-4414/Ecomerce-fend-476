@@ -2,11 +2,16 @@ import React, { Component } from "react";
 import {Link} from "react-router-dom";
 
 class PrevOrdersPageOrderRow extends Component{
+
+    state = {
+        detailUrl:"/orderdetails/"+this.props.orderItem.pk
+    }
+
     render() {
         return(
             <tr>
                 <td>
-                    <Link to="">{this.props.orderItem.unique_order_id}</Link>
+                    <Link to={this.state.detailUrl}>{this.props.orderItem.unique_order_id}</Link>
                     </td>
                 <td>
                     {/*<img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""*/}

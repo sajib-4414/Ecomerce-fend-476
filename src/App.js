@@ -18,6 +18,7 @@ import CompanyProductListToBuyForUserComp from "./components/CompanyProductListT
 import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
 import axios from "axios";
+import OrderDetailsPage from "./components/OrderDetailsPage";
 
 class App extends Component{
     state = {
@@ -100,6 +101,7 @@ class App extends Component{
                                    />)} />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
                             <Route exact path="/productlistbycategory" component={ProductListByCategoryComp}/>
+                            <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
                         </Switch>
 
 
