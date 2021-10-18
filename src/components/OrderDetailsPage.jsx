@@ -51,9 +51,9 @@ class OrderDetailsPage extends Component{
                     </div>
                 </div>
                 <div className="pricing">
-                    {/*<OrderDetailsProductsListComp*/}
-                    {/*orderLines = {this.state.order}*/}
-                    {/*/>*/}
+                    <OrderDetailsProductsListComp
+                    orderLines = {this.state.orderLines}
+                    />
                     <div className="row">
                         <div className="col-9"><span id="name">Shipping</span></div>
                         <div className="col-3"><span id="price">$CA{this.state.totalShippingCost}</span></div>
