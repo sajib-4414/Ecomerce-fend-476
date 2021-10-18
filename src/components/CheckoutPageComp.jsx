@@ -146,7 +146,22 @@ class CheckoutPageComp extends Component{
         }
         else {
             this.setState({...this.state,form_errors:{form_total_error:""}})
+            axios
+                .post(global.config.bkend.url+"/orders/", {
+                    buyer_user_id:1,
+                    value:this.getTotalPrice(this.state.cartlines),
+                    billing_firstname:this.state.form_data.billing_firstname,
+                    billing_lastname:this.state.form_data.billing_lastname,
+                    billing_email:this.state.form_data.billing_email,
+                    billing_contact_number:this.state.form_data.billing_contact_number
+                })
+                .then(res => {
+                    console.log(res);
+                    alert("succeed creating orders")
+
+                });
             //now submit the form
+
         }
 
         // if(isAnyErrorFound){
