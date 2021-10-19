@@ -132,12 +132,14 @@ class UserLoginComp extends Component{
                     this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['login']}})
                 }
 
+
             });
 
     }
     render() {
         return(
             <div id="login">
+                <div><Toaster/></div>
                 <h3 className="text-center text-white pt-5">Login form</h3>
                 <div className="container">
                     <div id="login-row" className="row justify-content-center align-items-center">
