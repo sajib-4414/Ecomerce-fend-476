@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import '../css/userlogin.css'
 import {Link} from "react-router-dom";
 import axios from "axios";
-import LoginContext from "../LoginContext";
 
 class UserLoginComp extends Component{
-    static contextType = LoginContext
     empty_error_list = {
         email:"Email cannot be left empty",
         password:"Password cannot be left empty",
