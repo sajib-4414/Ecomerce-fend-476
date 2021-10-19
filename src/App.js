@@ -19,6 +19,7 @@ import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
 import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetailsPage";
+import LogOutComponent from "./components/LogOutComponent";
 
 class App extends Component{
     state = {
@@ -102,6 +103,7 @@ class App extends Component{
     }
 
     getTotalItemsQuantity(){
+       // console.log(" I am quantity man, called")
         const items = this.state.cartLines
         let count = 0
         items.forEach(function (item, index) {
@@ -109,8 +111,42 @@ class App extends Component{
         });
         return count
     }
+    getCurrentUserType(){
+       // console.log(" I am type man, called")
+        //this method is used by the nav component to update the nav menus
+        const user = this.state.user
+        if(Object.keys(user).length ===0){
+            return "guest"
+        }
+        else{
+            if ('buyer' in user){
+                return 'buyer'
+            }
+            else return 'seller'
+        }
+    }
+    getCurrentUserName(){
+        const user = this.state.user
+        if(Object.keys(user).length ===0){
+            return ""
+        }
+        else{
+            if ('buyer' in user){
+                return user.buyer.first_name
+            }
+            else return user.seller.first_name
+        }
+    }
     updateCart = ()=>{
         this.callCartCarLinesApiAndUpdateState()
+    }
+    handleLogout = ()=>{
+        // alert("I am notified")
+        this.setState({
+            cart: {},
+            cartLines:[],
+            user:{}
+        })
     }
     render() {
         return (
@@ -118,6 +154,8 @@ class App extends Component{
                 <div className="App">
                     <NavComp
                     cartitemquantity = {this.getTotalItemsQuantity()}
+                    currentUserType={this.getCurrentUserType()}
+                    currentUserName={this.getCurrentUserName()}
                     />
                     <div className="container">
 
@@ -146,6 +184,12 @@ class App extends Component{
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
                             <Route exact path="/productlistbycategory/:category" component={ProductListByCategoryComp}/>
                             <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
+                            <Route exact path="/logout"
+                                   render={(props) => (
+                                       <LogOutComponent
+                                           notifyAppJSLogOut={this.handleLogout.bind(this)}
+                                       />)} />
+                            />
                         </Switch>
 
 

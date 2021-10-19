@@ -3,28 +3,28 @@ import { Dropdown } from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
 class NavComp extends Component{
-    state={
-        currentUserType:"guest",
-        currentUserName:""
-    }
-    componentDidMount() {
-        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
-        if(retrievedUser !==null){
-            if ('buyer' in retrievedUser){
-                this.setState({...this.state,currentUserName:retrievedUser.buyer.first_name, currentUserType:"buyer"})
-            }
-            else{
-                this.setState({...this.state,currentUserName:retrievedUser.seller.first_name, currentUserType:"seller"})
-            }
-        }
-        else{
-            //there is no user
-            this.setState({
-                currentUserType:"guest",
-                currentUserName:""
-            })
-        }
-    }
+    // state={
+    //     currentUserType:this.props.currentUserType,
+    //     currentUserName:""
+    // }
+    // componentDidMount() {
+    //     var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+    //     if(retrievedUser !==null){
+    //         if ('buyer' in retrievedUser){
+    //             this.setState({...this.state,currentUserName:retrievedUser.buyer.first_name, currentUserType:"buyer"})
+    //         }
+    //         else{
+    //             this.setState({...this.state,currentUserName:retrievedUser.seller.first_name, currentUserType:"seller"})
+    //         }
+    //     }
+    //     else{
+    //         //there is no user
+    //         this.setState({
+    //             currentUserType:"guest",
+    //             currentUserName:""
+    //         })
+    //     }
+    // }
 
     render() {
         return(
@@ -42,7 +42,7 @@ class NavComp extends Component{
                     <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
                     <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
                     {
-                        this.state.currentUserType=="buyer"?
+                        this.props.currentUserType=="buyer"?
                             <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
                             :
                             <span></span>
@@ -61,14 +61,14 @@ class NavComp extends Component{
                     }
 
                 </nav>
-                {this.state.currentUserName ?
+                {this.props.currentUserName ?
                     <Dropdown>
                         <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                            {this.state.currentUserName}
+                            {this.props.currentUserName}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item >
-                                <Link to="/">Logout</Link>
+                                <Link to="/logout">Logout</Link>
                             </Dropdown.Item>
                             {/*<Dropdown.Item href="#/action-2">*/}
                             {/*    <Link to="/sellersignin">*/}
