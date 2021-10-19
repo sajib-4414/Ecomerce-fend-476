@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import '../css/userlogin.css'
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import axios from "axios";
 
 class UserLoginComp extends Component{
@@ -121,6 +121,12 @@ class UserLoginComp extends Component{
                 // let history = useHistory();
                 // history.push("/userpreviousorders");
                 // <Redirect to='/userpreviousorders'  />
+                //const { navigate } = this.state
+
+                // Here is the important part
+                //if (navigate) {
+                //     <Redirect to="/" push={true} />
+                //}
 
             })
             .catch(error=>{
@@ -153,7 +159,7 @@ class UserLoginComp extends Component{
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="password" >Password:</label><br/>
-                                        <input type="text" name="password" id="password" value={this.state.password} onChange={this.handleChange.bind(this)} className="form-control"/>
+                                        <input type="password" name="password" id="password" value={this.state.password} onChange={this.handleChange.bind(this)} className="form-control"/>
                                         <div className="small text-danger">
                                             {this.state.errors.password}
                                         </div>
