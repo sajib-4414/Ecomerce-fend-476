@@ -113,8 +113,8 @@ class UserLoginComp extends Component{
             })
             .then(res => {
                 // console.log(res);
-                this.context = res.data
-                console.log(this.context);
+                const user = res.data
+                localStorage.setItem('currentUser', JSON.stringify(user));
 
                 // alert("succeed creating orders")
                 window.location.href = '/';
@@ -137,7 +137,6 @@ class UserLoginComp extends Component{
     render() {
         return(
             <div id="login">
-                <div><Toaster/></div>
                 <h3 className="text-center text-white pt-5">Login form</h3>
                 <div className="container">
                     <div id="login-row" className="row justify-content-center align-items-center">

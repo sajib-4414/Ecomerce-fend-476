@@ -23,17 +23,45 @@ import OrderDetailsPage from "./components/OrderDetailsPage";
 class App extends Component{
     state = {
         cart: {},
-        cartLines:[]
+        cartLines:[],
+        user:{}
     }
     callCartCarLinesApiAndUpdateState(){
-        axios
-            .get(global.config.bkend.url+"/cart-carlines-by-user/1/")
-            .then(response =>
-                {
-                    this.setCartDataInState(response)
-                }
+        console.log("callcartcarlinesapi called")
+        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (retrievedUser === null)
+        {
+            console.log("retrieved user is null")
+            return
+            //no user saved
+        }
+        else{
+            console.log("retrieved user is not null")
+            //some user saved
+            this.setState({...this.state,user:retrievedUser})
+            const buyer = retrievedUser.buyer
+            if(buyer !== undefined){
+                console.log("retrieved user is a buyer we see")
+                //this is a buyer user
+                const user_id = buyer.pk
+                axios
+                    .get(global.config.bkend.url+"/cart-carlines-by-user/"+user_id+"/")
+                    .then(response =>
+                        {
+                            this.setCartDataInState(response)
+                        }
+                    )
+                    .catch(error=>{
 
-            )
+                    })
+            }
+            else{
+                //this is a seller user, who does not have any cart
+                console.log("retrieved user is a seller we see")
+            }
+        }
+
+
     }
     setCartDataInState = response =>{
         const datacart = response.data
@@ -45,16 +73,32 @@ class App extends Component{
     }
     handleAddToCartProduct(pk){
         // alert("Hi I finally got the product id"+pk)
-        axios
-            .post(global.config.bkend.url+"/add-to-cart-user/", {
-                user_id:1,
-                product_id: pk
-            })
-            .then(response => {
-                console.log(response);
-                this.setCartDataInState(response)
-                // this.setState({todos:[...this.state.todos,res.data]})
-            });
+        const current_user = this.state.user
+        if (Object.keys(current_user).length===0){
+            //no user saved, cannot add product to cart
+            return
+        }
+        else{
+            //some user is there need to check what kind of user it is
+            if(current_user.hasOwnProperty('buyer')){
+                //buyer user, he can have a cart
+                axios
+                    .post(global.config.bkend.url+"/add-to-cart-user/", {
+                        user_id:current_user.buyer.pk,
+                        product_id: pk
+                    })
+                    .then(response => {
+                        console.log(response);
+                        this.setCartDataInState(response)
+                        // this.setState({todos:[...this.state.todos,res.data]})
+                    });
+            }
+            else{
+                //seller user, he cannot have a cart
+                return;
+            }
+        }
+
     }
 
     getTotalItemsQuantity(){

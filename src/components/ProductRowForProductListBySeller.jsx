@@ -22,7 +22,8 @@ class ProductRowForProductListBySeller extends Component {
                 <td>{name}</td>
                 <td>
 
-                    {company.company_name}</td>
+                    {company.company_name}
+                </td>
                 {this.checkStock(quantity) ?
                     <td><span className='text-success'><b>Yes</b></span></td>
                     :
