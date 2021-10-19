@@ -3,6 +3,7 @@ import '../css/userlogin.css'
 import {Link} from "react-router-dom";
 import axios from "axios";
 import LoginContext from "../LoginContext";
+
 class UserLoginComp extends Component{
     static contextType = LoginContext
     empty_error_list = {
@@ -125,6 +126,11 @@ class UserLoginComp extends Component{
 
             })
             .catch(error=>{
+                console.log(error.response)
+                const error_response = error.response
+                if (error_response.status == 404){
+                    this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['login']}})
+                }
 
             });
 
