@@ -3,6 +3,29 @@ import { Dropdown } from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
 class NavComp extends Component{
+    state={
+        currentUserType:"guest",
+        currentUserName:""
+    }
+    componentDidMount() {
+        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+        if(retrievedUser !==null){
+            if ('buyer' in retrievedUser){
+                this.setState({...this.state,currentUserName:retrievedUser.buyer.first_name, currentUserType:"buyer"})
+            }
+            else{
+                this.setState({...this.state,currentUserName:retrievedUser.seller.first_name, currentUserType:"seller"})
+            }
+        }
+        else{
+            //there is no user
+            this.setState({
+                currentUserType:"guest",
+                currentUserName:""
+            })
+        }
+    }
+
     render() {
         return(
             <div
@@ -18,7 +41,13 @@ class NavComp extends Component{
                     <Link className="p-2 text-dark" to="/">Home </Link>
                     <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
                     <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
-                    <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
+                    {
+                        this.state.currentUserType=="buyer"?
+                            <Link className='p-2 text-dark' to="/userpreviousorders">My Orders</Link>
+                            :
+                            <span></span>
+                    }
+
                     {this.props.cartitemquantity>0?
                         <Link className="btn" to="shoppingcart">
                             <i className="fa fa-shopping-cart"></i> Cart <span
@@ -32,21 +61,54 @@ class NavComp extends Component{
                     }
 
                 </nav>
-                <Dropdown>
-                    <Dropdown.Toggle variant="primary" id="dropdown-basic">
-                        Sign in
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item >
-                            <Link to="/usersignin">User sign in</Link>
+                {this.state.currentUserName ?
+                    <Dropdown>
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            {this.state.currentUserName}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item >
+                                <Link to="/">Logout</Link>
                             </Dropdown.Item>
-                        <Dropdown.Item href="#/action-2">
-                            <Link to="/sellersignin">
-                            Seller sign in
-                            </Link>
+                            {/*<Dropdown.Item href="#/action-2">*/}
+                            {/*    <Link to="/sellersignin">*/}
+                            {/*        Seller sign in*/}
+                            {/*    </Link>*/}
+                            {/*</Dropdown.Item>*/}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    :
+                    <Dropdown>
+                        <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                            Sign in
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu>
+                            <Dropdown.Item >
+                                <Link to="/usersignin">User sign in</Link>
                             </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
+                            <Dropdown.Item href="#/action-2">
+                                <Link to="/sellersignin">
+                                    Seller sign in
+                                </Link>
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                }
+                {/*<Dropdown>*/}
+                {/*    <Dropdown.Toggle variant="primary" id="dropdown-basic">*/}
+                {/*        Sign in*/}
+                {/*    </Dropdown.Toggle>*/}
+                {/*    <Dropdown.Menu>*/}
+                {/*        <Dropdown.Item >*/}
+                {/*            <Link to="/usersignin">User sign in</Link>*/}
+                {/*            </Dropdown.Item>*/}
+                {/*        <Dropdown.Item href="#/action-2">*/}
+                {/*            <Link to="/sellersignin">*/}
+                {/*            Seller sign in*/}
+                {/*            </Link>*/}
+                {/*            </Dropdown.Item>*/}
+                {/*    </Dropdown.Menu>*/}
+                {/*</Dropdown>*/}
             </div>
         )
     }
