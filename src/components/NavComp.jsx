@@ -38,9 +38,21 @@ class NavComp extends Component{
                 <nav className="my-0 my-md-0 mr-md-3">
 
 
-                    <Link className="p-2 text-dark" to="/">Home </Link>
-                    <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
-                    <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
+
+                    {this.props.currentUserType=="seller"?
+                        <React.Fragment>
+                            <Link className="p-2 text-dark" to="/">My Profile </Link>
+                            <Link className="p-2 text-dark" to="/">My added products </Link>
+                            <Link className="p-2 text-dark" to="/">Add a product </Link>
+                        </React.Fragment>
+                        :
+                        <React.Fragment>
+                            <Link className="p-2 text-dark" to="/">Home </Link>
+                            <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
+                            <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
+                        </React.Fragment>
+
+                    }
                     {
                         this.props.currentUserType=="buyer"?
                             <React.Fragment>
