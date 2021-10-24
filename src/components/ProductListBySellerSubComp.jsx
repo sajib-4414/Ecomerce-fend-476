@@ -14,6 +14,7 @@ class ProductListBySellerSubComp extends Component{
                 <ProductRowForProductListBySeller
                     product={product}
                     handleCartAdd={this.handleAddingToCartToListComp.bind(this)}
+                    key={product.pk}
 
                     // xyz={this.props.delTodo}
                     // addTodo={this.props.addTodo}

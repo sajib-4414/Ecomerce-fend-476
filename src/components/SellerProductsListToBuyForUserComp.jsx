@@ -9,18 +9,29 @@ class productsListToBuyForUserComp extends Component{
     constructor(props) {
         super(props);
         const query_params = queryString.parse(this.props.location.search)
-        console.log("Raw print is")
-        console.log(query_params)
-        console.log("keys are")
-        console.log(Object.keys(query_params))
-        console.log("found this, category="+query_params['?category'])
+        // console.log("Raw print is")
+        // console.log(query_params)
+        // console.log("keys are")
+        // console.log(Object.keys(query_params))
+        // console.log("found this, category="+query_params['?category'])
 
-        let queryBy= ''
-        let queryByValue=''
+
         //let's see what parameter we got
         // let params = queryString.parse(this.props.location)
-        console.log("printing from seller product list buy for user,location params=")
-        console.log(query_params)
+        // console.log("printing from seller product list buy for user,location params=")
+        // console.log(query_params)
+        const [queryBy, queryByValue] = this.getQueryValues(query_params);
+
+        this.state = {
+            products: [],
+            queryBy:queryBy,
+            queryByValue:queryByValue
+        }
+    }
+    getQueryValues(query_params) {
+        let queryBy= ''
+        let queryByValue=''
+
         if ('?category' in query_params){
             //means products by a specific category is requested
             queryBy = "category"
@@ -44,28 +55,73 @@ class productsListToBuyForUserComp extends Component{
         else{
             //do nothing, we did not get anything
         }
-        this.state = {
-            products: [],
-            queryBy:queryBy,
-            queryByValue:queryByValue
-        }
+        return [queryBy, queryByValue];
     }
+    refreshProductList(stateUpdateDict=null){
+        if (stateUpdateDict == null){
+            if (this.state.queryBy ==='category'){
+                console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
+                axios
+                    .get(global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
+                    .then(val =>
+                        {
+                            if(stateUpdateDict !=null){
+                                this.setState({...this.state,products:val.data,...stateUpdateDict})
+                                // console.log(val)
+                            }
 
+                        }
+
+                    )
+            }
+        }
+        else{
+            if (stateUpdateDict.queryBy ==='category'){
+                console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue)
+                axios
+                    .get(global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue)
+                    .then(val =>
+                        {
+                            if(stateUpdateDict !=null){
+                                this.setState({...this.state,products:val.data,...stateUpdateDict})
+                                // console.log(val)
+                            }
+
+                        }
+
+                    )
+            }
+        }
+
+    }
     //static contextType =App.ThemeContext;
     componentDidMount() {
-        if (this.state.queryBy ==='category'){
-            axios
-                .get(global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
-                .then(val =>
-                    {
-                        this.setState({products:val.data})
-                        console.log(val)
-                    }
+        this.refreshProductList()
+    }
 
-                )
+    componentDidUpdate(prevProps){
+        let params = queryString.parse(this.props.location.search)
+       // console.log("printing query string")
+      //  console.log(params['?category'])
+
+       // console.log("I am called did upadte")
+       // console.log(this.props.location)
+        if(this.props.location.search!== prevProps.location.search){
+            // ... write code to get new data using new prop, also update your state
+            alert("Hi, looks like query parameter is changed")
+            const [queryBy,queryByValue] = this.getQueryValues(params)
+            const stateUpdateDict = {
+                queryBy:queryBy,
+                queryByValue:queryByValue
+            }
+            console.log("new prop received, category="+queryByValue)
+            // this.setState({...this.state,queryBy:queryBy,queryByValue:queryByValue})
+            this.refreshProductList(stateUpdateDict)
+
+            //new category, update the data again
+            // this.setState({...this.state,categoryName:this.props.location.categoryName})
+            // this.fetchDataAndUpdateState()
         }
-
-
     }
     handleDataPropagation(pk){
         //alert(" I am from seller comp with pk="+pk)
