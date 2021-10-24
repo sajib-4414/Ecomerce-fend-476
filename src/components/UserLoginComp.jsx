@@ -85,6 +85,7 @@ class UserLoginComp extends Component{
         formEvent.preventDefault()
         if (this.state.errors.email !=="" || this.state.errors.password !==""){
             this.setState({...this.state,errors:{...this.state.errors,form:this.empty_error_list["form"]}})
+            return;
         }
         else if (this.state.errors.email ==="" && this.state.errors.password ===""){
             //now check if the fields are actually empty or not
@@ -98,9 +99,12 @@ class UserLoginComp extends Component{
             if (Object.keys(errors).length !== 0){
                 errors['form'] = this.empty_error_list['form']
                 this.setState({...this.state,errors:{...this.state.errors, ...errors}})
+                console.log("I am inside on submit of keys not empty")
+                return
                 console.log(errors)
             }
             else{
+                console.log("I am inside on submit of keys empty")
                 //we are ready to submit the form
                 this.setState({...this.state,errors:{...this.state.errors,form:""}})
             }

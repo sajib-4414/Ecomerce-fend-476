@@ -72,6 +72,7 @@ class SellerLoginComp extends Component{
                         }})
                 }
                 else{
+                    console.log("I am inside the error of the on change")
                     this.setState({...this.state,[target]:val, errors:{
                             ...this.state.errors,[target]:this.validation_error_list[target]
                         }})
@@ -85,6 +86,7 @@ class SellerLoginComp extends Component{
         formEvent.preventDefault()
         if (this.state.errors.email !=="" || this.state.errors.password !==""){
             this.setState({...this.state,errors:{...this.state.errors,form:this.empty_error_list["form"]}})
+            return;
         }
         else if (this.state.errors.email ==="" && this.state.errors.password ===""){
             //now check if the fields are actually empty or not
@@ -98,6 +100,7 @@ class SellerLoginComp extends Component{
             if (Object.keys(errors).length !== 0){
                 errors['form'] = this.empty_error_list['form']
                 this.setState({...this.state,errors:{...this.state.errors, ...errors}})
+                return
                 console.log(errors)
             }
             else{
