@@ -109,7 +109,8 @@ class UserLoginComp extends Component{
         axios
             .post(global.config.bkend.url+"/get-auth-token/", {
                 email:this.state.email,
-                password:this.state.password
+                password:this.state.password,
+                is_buyer:true
             })
             .then(res => {
                 // console.log(res);
