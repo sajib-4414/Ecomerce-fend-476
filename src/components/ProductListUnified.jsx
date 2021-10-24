@@ -108,7 +108,7 @@ class productsListToBuyForUserComp extends Component{
        // console.log(this.props.location)
         if(this.props.location.search!== prevProps.location.search){
             // ... write code to get new data using new prop, also update your state
-            alert("Hi, looks like query parameter is changed")
+            // alert("Hi, looks like query parameter is changed")
             const [queryBy,queryByValue] = this.getQueryValues(params)
             const stateUpdateDict = {
                 queryBy:queryBy,
@@ -117,10 +117,6 @@ class productsListToBuyForUserComp extends Component{
             console.log("new prop received, category="+queryByValue)
             // this.setState({...this.state,queryBy:queryBy,queryByValue:queryByValue})
             this.refreshProductList(stateUpdateDict)
-
-            //new category, update the data again
-            // this.setState({...this.state,categoryName:this.props.location.categoryName})
-            // this.fetchDataAndUpdateState()
         }
     }
     handleDataPropagation(pk){
@@ -133,7 +129,7 @@ class productsListToBuyForUserComp extends Component{
                 <div className="col-xl-12">
                     <div className="card">
                         <div className="card-body">
-                            <h5 className="header-title pb-3 mt-0">Products from the seller Jane Doe</h5>
+                            <h5 className="header-title pb-3 mt-0">Products from the chosen {this.state.queryBy}</h5>
                             <div className="table-responsive">
                                 <table className="table table-hover mb-0">
                                     <thead>
