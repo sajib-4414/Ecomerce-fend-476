@@ -1,6 +1,8 @@
 import React, {Component } from 'react'
 import axios from "axios";
-class ProductRowForProductListBySeller extends Component {
+import {Link} from "react-router-dom";
+import {ToastHeader} from "react-bootstrap";
+class ProductListUnifiedProductRow extends Component {
     checkStock(quantity){
         if (quantity>0){
             return true
@@ -14,6 +16,14 @@ class ProductRowForProductListBySeller extends Component {
         // this.props.handleCartAdd(pk)
     }
     // {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
+    getCompanyURL() {
+        console.log("printing the company")
+        const product = this.props.product
+        const company = product.company
+        console.log(company)
+        const url = "/productlist?company_id=" + company.pk
+        return url
+    }
 
     render (){
     let {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
@@ -21,8 +31,9 @@ class ProductRowForProductListBySeller extends Component {
             <tr>
                 <td>{name}</td>
                 <td>
+                    <Link className='p-2 text-dark' to={this.getCompanyURL()} >{company.company_name}</Link>
 
-                    {company.company_name}</td>
+                </td>
                 {this.checkStock(quantity) ?
                     <td><span className='text-success'><b>Yes</b></span></td>
                     :
@@ -51,4 +62,4 @@ class ProductRowForProductListBySeller extends Component {
 //     // );
 //   };
 }
-export default ProductRowForProductListBySeller
+export default ProductListUnifiedProductRow

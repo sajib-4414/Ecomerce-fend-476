@@ -1,6 +1,6 @@
 import React, {Component} from "react"
-import ProductRowForProductListBySeller from "./ProductRowForProductListBySeller";
-class ProductListBySellerSubComp extends Component{
+import ProductListUnifiedProductRow from "./ProductListUnifiedProductRow";
+class ProductListUnifiedSubListComp extends Component{
     handleAddingToCartToListComp(pk){
         //alert("I M in the subcomp with pk"+pk)
         //console.log(this.props)
@@ -11,9 +11,10 @@ class ProductListBySellerSubComp extends Component{
 
         return (
             this.props.products.map(product => (
-                <ProductRowForProductListBySeller
+                <ProductListUnifiedProductRow
                     product={product}
                     handleCartAdd={this.handleAddingToCartToListComp.bind(this)}
+                    key={product.pk}
 
                     // xyz={this.props.delTodo}
                     // addTodo={this.props.addTodo}
@@ -28,4 +29,4 @@ class ProductListBySellerSubComp extends Component{
 
 }
 
-export default ProductListBySellerSubComp
+export default ProductListUnifiedSubListComp
