@@ -51,8 +51,10 @@ class NavComp extends Component{
                         :
                         <React.Fragment>
                             <Link className="p-2 text-dark" to="/">Home </Link>
-                            <Link className='p-2 text-dark' to="/productlistbycategory/Tech">Tech Products</Link>
-                            <Link className='p-2 text-dark' to="/productlistbycategory">Fashion Products</Link>
+                            <Link className='p-2 text-dark' to="/productlist?category=Tech" >Tech Products</Link>
+                            <Link className='p-2 text-dark' to="/productlist?category=Fashion">Fashion products
+                                   {/*to="/productlistbycategory/Fashion"*/}
+                           </Link>
                         </React.Fragment>
 
                     }

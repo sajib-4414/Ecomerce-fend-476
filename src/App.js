@@ -176,13 +176,17 @@ class App extends Component{
                                            initialCartLines={this.state.cartLines}
                                            notifyAppJSToUpdateCart={this.updateCart.bind(this)}
                                        />)} />
-                            <Route exact path="/productlistbyseller"
-                                   render={(props) => (
-                                       <SellerProductsListToBuyForUserComp
-                                           handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
-                                   />)} />
+                            <Route exact path="/productlist"
+                                   component={SellerProductsListToBuyForUserComp}
+                                   handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
+                                   // render={(props) => (
+                                   //     <SellerProductsListToBuyForUserComp
+                                   //         handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
+                                   //         search={props.location.search}
+                                   // />)}
+                            />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
-                            <Route exact path="/productlistbycategory/:category" component={ProductListByCategoryComp}/>
+                            <Route exact path="/productlistbycategory/" component={SellerProductsListToBuyForUserComp}/>
                             <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
                             <Route exact path="/logout"
                                    render={(props) => (

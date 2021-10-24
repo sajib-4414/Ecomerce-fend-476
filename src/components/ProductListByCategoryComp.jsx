@@ -1,19 +1,58 @@
 import React, { Component } from "react";
 import '../css/sellerproductlist.css'
 import axios from "axios";
+import * as queryString from "querystring";
 
 class ProductListByCategoryComp extends Component{
-    state = {
-        categoryName:this.props.match.params.category,
+
+    constructor(props) {
+        super(props);
+        console.log("printing from product by category comp props")
+        // console.log(this.props.location.search)
+        const category_param = queryString.parse(this.props.search)
+        console.log("Raw print is")
+        console.log(category_param)
+        console.log("keys are")
+        console.log(Object.keys(category_param))
+        console.log("found this, category="+category_param['?category'])
+
+        this.state = {
+            categoryName:category_param['?category'],
+            product_list:{}
+        }
     }
-    componentDidMount() {
+    componentDidUpdate(prevProps){
+        let params = queryString.parse(this.props.location.search)
+        console.log("printing query string")
+        console.log(params['?category'])
+
+        console.log("I am called did upadte")
+        console.log(this.props.location)
+        if(this.props.location.categoryName!== prevProps.location.categoryName){
+            // ... write code to get new data using new prop, also update your state
+
+
+            //new category, update the data again
+            this.setState({...this.state,categoryName:this.props.location.categoryName})
+            this.fetchDataAndUpdateState()
+        }
+    }
+    fetchDataAndUpdateState(){
+        // let params = queryString.parse(this.props.location.search)
+        // console.log("printing query string")
+        // console.log(params)
+        console.log("calling API")
+        console.log(global.config.bkend.url + "/products-by-category/"+this.state.categoryName+"/")
         axios
-            .get(global.config.bkend.url + "/products/")
+            .get(global.config.bkend.url + "/products-by-category/"+this.state.categoryName+"/")
             .then(val => {
-                    this.setState({sellerProducts: val.data})
+                    this.setState({...this.state,product_list: val.data})
                     console.log(val)
                 }
             )
+    }
+    componentDidMount() {
+        this.fetchDataAndUpdateState()
     }
     render() {
         return(

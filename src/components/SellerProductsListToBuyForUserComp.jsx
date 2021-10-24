@@ -3,22 +3,68 @@ import '../css/sellerproductlist.css'
 import axios from "axios";
 import ProductListBySellerSubComp from "./ProductListBySellerSubComp";
 import '../config';
+import queryString from "querystring";
 
-class SellerProductsListToBuyForUserComp extends Component{
-    state = {
-        sellerProducts: []
+class productsListToBuyForUserComp extends Component{
+    constructor(props) {
+        super(props);
+        const query_params = queryString.parse(this.props.location.search)
+        console.log("Raw print is")
+        console.log(query_params)
+        console.log("keys are")
+        console.log(Object.keys(query_params))
+        console.log("found this, category="+query_params['?category'])
+
+        let queryBy= ''
+        let queryByValue=''
+        //let's see what parameter we got
+        // let params = queryString.parse(this.props.location)
+        console.log("printing from seller product list buy for user,location params=")
+        console.log(query_params)
+        if ('?category' in query_params){
+            //means products by a specific category is requested
+            queryBy = "category"
+            queryByValue = query_params['?category']
+        }
+        else if ('?company_id' in query_params){
+            //means products by a specific company/brand is requested
+            queryBy = 'company'
+            queryByValue = query_params['?company_id']
+        }
+        else if ('?seller_id' in query_params){
+            //means products by a specific seller is requested
+            queryBy = 'seller'
+            queryByValue = query_params['?seller_id']
+        }
+        else if ('?search_query' in query_params){
+            //means products by a specific search query is requested
+            queryBy = 'search'
+            queryByValue = query_params['?search_query']
+        }
+        else{
+            //do nothing, we did not get anything
+        }
+        this.state = {
+            products: [],
+            queryBy:queryBy,
+            queryByValue:queryByValue
+        }
     }
+
     //static contextType =App.ThemeContext;
     componentDidMount() {
-        axios
-            .get(global.config.bkend.url+"/products/")
-            .then(val =>
-            {
-                this.setState({sellerProducts:val.data})
-                console.log(val)
-            }
+        if (this.state.queryBy ==='category'){
+            axios
+                .get(global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
+                .then(val =>
+                    {
+                        this.setState({products:val.data})
+                        console.log(val)
+                    }
 
-            )
+                )
+        }
+
 
     }
     handleDataPropagation(pk){
@@ -45,7 +91,7 @@ class SellerProductsListToBuyForUserComp extends Component{
                                     </thead>
                                     <tbody>
                                     <ProductListBySellerSubComp
-                                    products={this.state.sellerProducts}
+                                    products={this.state.products}
                                     handleCartAddToParent = { this.handleDataPropagation.bind(this)}
                                     />
 
@@ -71,4 +117,4 @@ class SellerProductsListToBuyForUserComp extends Component{
         );
     }
 }
-export default SellerProductsListToBuyForUserComp
+export default productsListToBuyForUserComp
