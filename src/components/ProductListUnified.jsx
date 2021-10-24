@@ -59,21 +59,25 @@ class productsListToBuyForUserComp extends Component{
     }
     refreshProductList(stateUpdateDict=null){
         if (stateUpdateDict == null){
+            //means component is just loaded, state we don't want to update the state of
+            //querytype, querytype value here, which will cause not to render properly
+            let url = ''
             if (this.state.queryBy ==='category'){
-                console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
-                axios
-                    .get(global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
-                    .then(val =>
-                        {
-                            // if(stateUpdateDict !=null){
-                                this.setState({...this.state,products:val.data})
-                                // console.log(val)
-                            // }
-
-                        }
-
-                    )
+                url = global.config.bkend.url+"/products-by-category/"+this.state.queryByValue;
             }
+            else if (this.state.queryBy ==='company'){
+                url = global.config.bkend.url+"/products-by-company/"+this.state.queryByValue;
+            }
+            console.log("calling the API:"+url)
+            axios
+                .get(url)
+                .then(val =>
+                    {
+                        // if(stateUpdateDict !=null){
+                        this.setState({...this.state,products:val.data})
+                        // console.log(val)
+                        // }
+                    })
         }
         else{
             if (stateUpdateDict.queryBy ==='category'){
