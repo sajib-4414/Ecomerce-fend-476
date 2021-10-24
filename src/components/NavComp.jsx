@@ -42,8 +42,8 @@ class NavComp extends Component{
                     {this.props.currentUserType=="seller"?
                         <React.Fragment>
                             <Link className="p-2 text-dark" to="/">My Profile </Link>
-                            <Link className="p-2 text-dark" to="/">My added products </Link>
-                            <Link className="p-2 text-dark" to="/">Add a product </Link>
+                            <Link className="p-2 text-dark" to="/productlistforseller">My added products </Link>
+                            <Link className="p-2 text-dark" to="/addproduct">Add a product </Link>
                         </React.Fragment>
                         :
                         <React.Fragment>
