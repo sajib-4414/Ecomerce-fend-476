@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import '../css/sellerproductlist.css'
 import axios from "axios";
-import ProductListBySellerSubComp from "./ProductListBySellerSubComp";
+import ProductListUnifiedSubListComp from "./ProductListUnifiedSubListComp";
 import '../config';
 import queryString from "querystring";
 
@@ -65,10 +65,10 @@ class productsListToBuyForUserComp extends Component{
                     .get(global.config.bkend.url+"/products-by-category/"+this.state.queryByValue)
                     .then(val =>
                         {
-                            if(stateUpdateDict !=null){
-                                this.setState({...this.state,products:val.data,...stateUpdateDict})
+                            // if(stateUpdateDict !=null){
+                                this.setState({...this.state,products:val.data})
                                 // console.log(val)
-                            }
+                            // }
 
                         }
 
@@ -146,7 +146,7 @@ class productsListToBuyForUserComp extends Component{
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <ProductListBySellerSubComp
+                                    <ProductListUnifiedSubListComp
                                     products={this.state.products}
                                     handleCartAddToParent = { this.handleDataPropagation.bind(this)}
                                     />

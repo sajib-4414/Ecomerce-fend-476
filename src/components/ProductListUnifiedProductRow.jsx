@@ -1,6 +1,6 @@
 import React, {Component } from 'react'
 import axios from "axios";
-class ProductRowForProductListBySeller extends Component {
+class ProductListUnifiedProductRow extends Component {
     checkStock(quantity){
         if (quantity>0){
             return true
@@ -52,4 +52,4 @@ class ProductRowForProductListBySeller extends Component {
 //     // );
 //   };
 }
-export default ProductRowForProductListBySeller
+export default ProductListUnifiedProductRow

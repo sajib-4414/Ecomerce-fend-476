@@ -13,9 +13,9 @@ import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
-import SellerProductsListToBuyForUserComp from "./components/SellerProductsListToBuyForUserComp";
+import SellerProductsListToBuyForUserComp from "./components/ProductListUnified";
 import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
-import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
+//import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
 import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetailsPage";
@@ -186,7 +186,7 @@ class App extends Component{
                                    // />)}
                             />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
-                            <Route exact path="/productlistbycategory/" component={SellerProductsListToBuyForUserComp}/>
+                            {/*<Route exact path="/productlistbycategory/" component={SellerProductsListToBuyForUserComp}/>*/}
                             <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
                             <Route exact path="/logout"
                                    render={(props) => (
