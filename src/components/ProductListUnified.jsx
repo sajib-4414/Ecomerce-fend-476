@@ -9,17 +9,6 @@ class productsListToBuyForUserComp extends Component{
     constructor(props) {
         super(props);
         const query_params = queryString.parse(this.props.location.search)
-        // console.log("Raw print is")
-        // console.log(query_params)
-        // console.log("keys are")
-        // console.log(Object.keys(query_params))
-        // console.log("found this, category="+query_params['?category'])
-
-
-        //let's see what parameter we got
-        // let params = queryString.parse(this.props.location)
-        // console.log("printing from seller product list buy for user,location params=")
-        // console.log(query_params)
         const [queryBy, queryByValue] = this.getQueryValues(query_params);
 
         this.state = {
@@ -80,6 +69,12 @@ class productsListToBuyForUserComp extends Component{
                     })
         }
         else{
+            //here we are updating because the url parameter is changed,
+            //if we update the state when we detect the change in component did update
+            // and also again here, then render does not work properly
+            //in this case, the changes are passed from the component did update to here
+            //so that when we here update the product list in the state, we also update
+            //the querytype, querytype value, at the same time, so that render works flawlessly
             if (stateUpdateDict.queryBy ==='category'){
                 console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue)
                 axios
@@ -105,26 +100,16 @@ class productsListToBuyForUserComp extends Component{
 
     componentDidUpdate(prevProps){
         let params = queryString.parse(this.props.location.search)
-       // console.log("printing query string")
-      //  console.log(params['?category'])
-
-       // console.log("I am called did upadte")
-       // console.log(this.props.location)
         if(this.props.location.search!== prevProps.location.search){
-            // ... write code to get new data using new prop, also update your state
-            // alert("Hi, looks like query parameter is changed")
             const [queryBy,queryByValue] = this.getQueryValues(params)
             const stateUpdateDict = {
                 queryBy:queryBy,
                 queryByValue:queryByValue
             }
-            console.log("new prop received, category="+queryByValue)
-            // this.setState({...this.state,queryBy:queryBy,queryByValue:queryByValue})
             this.refreshProductList(stateUpdateDict)
         }
     }
     handleDataPropagation(pk){
-        //alert(" I am from seller comp with pk="+pk)
         this.props.handleAddToCartToAppJS(pk)
     }
     render() {
