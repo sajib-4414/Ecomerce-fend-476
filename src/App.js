@@ -53,11 +53,11 @@ class App extends Component{
         user:{}
     }
     callCartCarLinesApiAndUpdateState(){
-        console.log("callcartcarlinesapi called")
+       // console.log("callcartcarlinesapi called")
         var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
         if (retrievedUser === null)
         {
-            console.log("retrieved user is null")
+           // console.log("retrieved user is null")
             return
             //no user saved
         }

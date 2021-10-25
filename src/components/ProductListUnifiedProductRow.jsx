@@ -20,10 +20,10 @@ class ProductListUnifiedProductRow extends Component {
     }
     // {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
     getCompanyURL() {
-        console.log("printing the company")
+        //console.log("printing the company")
         const product = this.props.product
         const company = product.company
-        console.log(company)
+       // console.log(company)
         // const url =
         return "/productlist?company_id=" + company.pk+"/"
     }
