@@ -76,9 +76,9 @@ class productsListToBuyForUserComp extends Component{
             //so that when we here update the product list in the state, we also update
             //the querytype, querytype value, at the same time, so that render works flawlessly
             if (stateUpdateDict.queryBy ==='category'){
-                console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue)
+                console.log("calling the API:"+global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue+"/")
                 axios
-                    .get(global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue)
+                    .get(global.config.bkend.url+"/products-by-category/"+stateUpdateDict.queryByValue+"/")
                     .then(val =>
                         {
                             if(stateUpdateDict !=null){
