@@ -5,9 +5,12 @@ import ProductListUnifiedSubListComp from "./ProductListUnifiedSubListComp";
 import '../config';
 import queryString from "querystring";
 
-class productsListToBuyForUserComp extends Component{
+class ProductListUnified extends Component{
+
     constructor(props) {
         super(props);
+        this._isMounted = false;
+
         const query_params = queryString.parse(this.props.location.search)
         const [queryBy, queryByValue] = this.getQueryValues(query_params);
 
@@ -95,9 +98,12 @@ class productsListToBuyForUserComp extends Component{
     }
     //static contextType =App.ThemeContext;
     componentDidMount() {
-        this.refreshProductList()
+        this._isMounted = true;
+        this._isMounted && this.refreshProductList()
     }
-
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
     componentDidUpdate(prevProps){
         let params = queryString.parse(this.props.location.search)
         if(this.props.location.search!== prevProps.location.search){
@@ -110,6 +116,7 @@ class productsListToBuyForUserComp extends Component{
         }
     }
     handleDataPropagation(pk){
+        // console.log(this.props)
         this.props.handleAddToCartToAppJS(pk)
     }
     render() {
@@ -158,4 +165,4 @@ class productsListToBuyForUserComp extends Component{
         );
     }
 }
-export default productsListToBuyForUserComp
+export default ProductListUnified

@@ -13,7 +13,7 @@ import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
-import SellerProductsListToBuyForUserComp from "./components/ProductListUnified";
+import ProductListUnified from "./components/ProductListUnified";
 import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
 //import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
@@ -21,7 +21,32 @@ import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetailsPage";
 import LogOutComponent from "./components/LogOutComponent";
 
+//this is a special wrapper component that allows passing a prop to a router component
+//this also retains the component's capability to receive location prop
+//which is by default disabled if you use the render argument in the router
+//the problem was if you send props using the render argument to a route
+//react does not allow anymore location props(such as query parameter) parsing in the component
+//this wrapper class written by a person does both
+//however, using this type of prop passing, you will get App's state undefined, when
+//back propagation to App.js happen
+//to solve when passing any function, first bind it then pass it
+//see below how i bound the method before passing it as a prop using this special component
+//you will also see an error, leaking memory, to fix use mounted =false like this
+//https://stackoverflow.com/a/52061655
+const AddPropsToRoute = (WrappedComponent, passedProps)=>{
+    return (
+        class Route extends Component{
+            render(){
+                let props = Object.assign({}, this.props, passedProps)
+                return  <WrappedComponent {...props} />
+            }
+        }
+    )
+}
+
+
 class App extends Component{
+
     state = {
         cart: {},
         cartLines:[],
@@ -73,7 +98,10 @@ class App extends Component{
         this.callCartCarLinesApiAndUpdateState()
     }
     handleAddToCartProduct(pk){
-        // alert("Hi I finally got the product id"+pk)
+       // alert("Hi I finally got the product id"+pk)
+        this.setState({})
+        console.log(this.state)
+        // return;
         const current_user = this.state.user
         if (Object.keys(current_user).length===0){
             //no user saved, cannot add product to cart
@@ -149,6 +177,10 @@ class App extends Component{
         })
     }
     render() {
+        let boundMethod = this.handleAddToCartProduct.bind(this)
+        let passingProps = {
+            handleAddToCartToAppJS: boundMethod
+        }
         return (
             <BrowserRouter>
                 <div className="App">
@@ -177,12 +209,15 @@ class App extends Component{
                                            notifyAppJSToUpdateCart={this.updateCart.bind(this)}
                                        />)} />
                             <Route exact path="/productlist"
-                                   component={SellerProductsListToBuyForUserComp}
-                                   handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
+                                   // element={<SellerProductsListToBuyForUserComp authed={true}/>}
+                                   component={AddPropsToRoute(ProductListUnified, passingProps)}
+                                   // component={SellerProductsListToBuyForUserComp}
+                                   // handleAddToCartToAppJS={this.handleAddToCartProduct}
+                                   // xxx={"12"}
                                    // render={(props) => (
                                    //     <SellerProductsListToBuyForUserComp
                                    //         handleAddToCartToAppJS={this.handleAddToCartProduct.bind(this)}
-                                   //         search={props.location.search}
+                                   //         // search={props.location.search}
                                    // />)}
                             />
                             <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
