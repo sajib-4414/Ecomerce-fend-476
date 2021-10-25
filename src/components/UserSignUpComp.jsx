@@ -160,24 +160,30 @@ class UserSignUpComp extends Component{
                 break
             }
         }
-        alert("any error found="+isAnyErrorFound)
+        // alert("any error found="+isAnyErrorFound)
         if(isAnyErrorFound){
             return
         }
         else {
             this.setState({...this.state,errors:{...this.state.errors,form:""}})
-            // axios
-            //     .post(global.config.bkend.url+"/orders/", {
-            //         buyer_user_id:1,
-            //         value:this.getTotalPrice(this.state.cartlines),
-            //         billing_firstname:this.state.form_data.billing_firstname,
-            //         billing_lastname:this.state.form_data.billing_lastname,
-            //         billing_email:this.state.form_data.billing_email,
-            //         billing_contact_number:this.state.form_data.billing_contact_number
-            //     })
-            //     .then(res => {
-            //         window.location.href = '/userpreviousorders';
-            //     });
+            axios
+                .post(global.config.bkend.url+"/buyers/", {
+                    first_name:this.state.first_name,
+                    last_name:this.state.last_name,
+                    email:this.state.email,
+                    username:this.state.username,
+                    password:this.state.password
+                })
+                .then(res => {
+                    window.location.href = '/signupsuccess';
+                })
+                .catch(errors=>{
+                    console.log(errors.response)
+                    const error_response = errors.response
+                    if(error_response.status === 400){
+                        this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
+                    }
+                });
             //now submit the form
 
         }

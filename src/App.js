@@ -20,6 +20,7 @@ import { Component } from "react";
 import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetailsPage";
 import LogOutComponent from "./components/LogOutComponent";
+import SignUpSuccess from "./components/SignUpSuccess";
 
 //this is a special wrapper component that allows passing a prop to a router component
 //this also retains the component's capability to receive location prop
@@ -228,6 +229,7 @@ class App extends Component{
                                        <LogOutComponent
                                            notifyAppJSLogOut={this.handleLogout.bind(this)}
                                        />)} />
+                            <Route exact path="/signupsuccess" component={SignUpSuccess}/>
                             />
                         </Switch>
 
