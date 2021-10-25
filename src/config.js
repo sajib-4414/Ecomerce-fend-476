@@ -8,6 +8,6 @@ module.exports = global.config = {
     // }
     // other global config variables you wish
     bkend:{
-        url:"https://arefin4414.pythonanywhere.com/"
+        url:"https://arefin4414.pythonanywhere.com"
     }
 };
