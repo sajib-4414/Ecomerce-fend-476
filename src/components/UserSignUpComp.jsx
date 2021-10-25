@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import '../css/usersignup.css'
 import {Link} from "react-router-dom";
+import axios from "axios";
+import jQuery from 'jquery';
 class UserSignUpComp extends Component{
     empty_error_list = {
         email:"Email cannot be left empty",
@@ -15,6 +17,7 @@ class UserSignUpComp extends Component{
     validation_error_list = {
         email:"Please enter a valid email address",
         password:"Password should be Minimum eight characters, at least one letter and one number:",
+        confirmPassword:"Password must match",
         form:"Please correct all the mistakes before submitting the form",
         signup:"Email or Password is incorrect",
     }
@@ -54,10 +57,132 @@ class UserSignUpComp extends Component{
             //     errors:{...this.state.errors,[target]:this.empty_error_list[target]}})
         }
         else{
-            this.setState({...this.state,[e.target.name]:e.target.value,errors:{
-                    ...this.state.errors,[target]:""
-                }})
+            //for some fields we need to have more validation
+            if(target === "email"){
+                if(this.validateEmail(val)){
+                    this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                            ...this.state.errors,[target]:""
+                        }})
+                }
+                else{
+                    this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                            ...this.state.errors,[target]:this.validation_error_list[target]
+                        }})
+                }
+            }
+            else if(target ==="password"){
+                if(this.validatePassword(val)){
+                    this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                            ...this.state.errors,[target]:""
+                        }})
+                }
+                else{
+                    this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                            ...this.state.errors,[target]:this.validation_error_list[target]
+                        }})
+                }
+            }
+            else if(target ==="confirmPassword") {
+                if(this.state.password !==""){
+                    if(this.state.password !== val){
+                        this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                                ...this.state.errors,[target]:this.validation_error_list[target]
+                            }})
+                    }
+                    else{
+                        this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                                ...this.state.errors,[target]:""
+                            }})
+                    }
+                }
+                else{
+                    this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                            ...this.state.errors,[target]:""
+                        }})
+                }
+            }
+            else{
+                //only value is enough for other values
+                this.setState({...this.state,[e.target.name]:e.target.value,errors:{
+                        ...this.state.errors,[target]:""
+                    }})
+            }
+
         }
+
+    }
+
+    handleFormSubmission(formEvent){
+        // alert("I am here submited")
+        formEvent.preventDefault()
+        // console.log(this.state)
+        // return;
+
+
+        //check empty fields and forcefully assign errors
+        const all_form_data = jQuery.extend({},  this.state)
+        delete all_form_data.errors;
+
+            // this.state.form_data
+        let errors = {}
+        for (var key in all_form_data) {
+            if (all_form_data.hasOwnProperty(key)) {
+                if (all_form_data[key] === ""){
+                    errors[key] = this.empty_error_list[key]
+                }
+
+            }
+        }
+        //now let's check for validation errors
+        if(this.state.password !== ""){
+            if(!this.validatePassword(this.state.password)){
+                errors['password'] = this.validation_error_list['password']
+            }
+        }
+        if (this.state.password !== "" && this.state.confirmPassword !== ""){
+            if (this.state.password !== this.state.confirmPassword){
+                errors['confirmPassword'] = this.validation_error_list['confirmPassword']
+            }
+        }
+        if(this.state.email !==""){
+            if(!this.validateEmail(this.state.email)){
+                errors['email'] = this.validation_error_list['email']
+            }
+        }
+
+        let isAnyErrorFound = false
+        // delete errors.form_total_error
+        for (var key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                errors['form'] = 'Please correct all the errors before submitting'
+                this.setState({...this.state,errors:{...this.state.errors,...errors}})
+                isAnyErrorFound = true
+                break
+            }
+        }
+        alert("any error found="+isAnyErrorFound)
+        if(isAnyErrorFound){
+            return
+        }
+        else {
+            this.setState({...this.state,errors:{...this.state.errors,form:""}})
+            // axios
+            //     .post(global.config.bkend.url+"/orders/", {
+            //         buyer_user_id:1,
+            //         value:this.getTotalPrice(this.state.cartlines),
+            //         billing_firstname:this.state.form_data.billing_firstname,
+            //         billing_lastname:this.state.form_data.billing_lastname,
+            //         billing_email:this.state.form_data.billing_email,
+            //         billing_contact_number:this.state.form_data.billing_contact_number
+            //     })
+            //     .then(res => {
+            //         window.location.href = '/userpreviousorders';
+            //     });
+            //now submit the form
+
+        }
+
+
 
     }
 
@@ -69,7 +194,7 @@ class UserSignUpComp extends Component{
                     <hr/>
                 </div>
                 <div className="main-login main-center">
-                        <form className="form-horizontal" method="post" action="#">
+                        <form className="form-horizontal" action="" onSubmit={this.handleFormSubmission.bind(this)} method="post" >
 
                             <div className="form-group">
                                 <label htmlFor="name" className="cols-sm-2 control-label">Your First Name</label>
@@ -161,9 +286,11 @@ class UserSignUpComp extends Component{
                                     </div>
                                 </div>
                             </div>
-
+                            <div className="text-center text-danger">
+                                {this.state.errors.form}
+                            </div>
                             <div className="form-group ">
-                                <button type="button" className="btn btn-primary btn-lg btn-block login-button">Register</button>
+                                <button type="button" type="submit" className="btn btn-primary btn-lg btn-block login-button">Register</button>
                             </div>
                             <div className="login-register">
                                 <Link  to="/usersignin">Login</Link>
