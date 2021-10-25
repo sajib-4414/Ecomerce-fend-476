@@ -52,10 +52,10 @@ class productsListToBuyForUserComp extends Component{
             //querytype, querytype value here, which will cause not to render properly
             let url = ''
             if (this.state.queryBy ==='category'){
-                url = global.config.bkend.url+"/products-by-category/"+this.state.queryByValue;
+                url = global.config.bkend.url+"/products-by-category/"+this.state.queryByValue+"/";
             }
             else if (this.state.queryBy ==='company'){
-                url = global.config.bkend.url+"/products-by-company/"+this.state.queryByValue;
+                url = global.config.bkend.url+"/products-by-company/"+this.state.queryByValue+"/";
             }
             console.log("calling the API:"+url)
             axios
