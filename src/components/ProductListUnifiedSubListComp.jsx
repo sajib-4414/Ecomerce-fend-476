@@ -4,8 +4,23 @@ class ProductListUnifiedSubListComp extends Component{
     handleAddingToCartToListComp(pk){
         //alert("I M in the subcomp with pk"+pk)
         //console.log(this.props)
-
+        if (this.loggedInuserIsABuyer()){
          this.props.handleCartAddToParent(pk)
+        }
+        else{
+            //show toast, call parent activity to show toast
+            this.props.handleShowToast()
+        }
+    }
+    loggedInuserIsABuyer =()=>{
+        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (retrievedUser !== null)
+        {
+            if ('buyer' in retrievedUser){
+                return true
+            }
+        }
+        return false
     }
     render() {
 
