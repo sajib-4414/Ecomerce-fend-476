@@ -1,16 +1,16 @@
 import React, { Component } from "react";
-import '../css/usersignup.css'
+import '../../css/usersignup.css'
 import {Link} from "react-router-dom";
 import axios from "axios";
 import jQuery from 'jquery';
-class UserSignUpComp extends Component{
+class SellerSignUpComp extends Component{
     empty_error_list = {
         email:"Email cannot be left empty",
         password:"Password cannot be left empty",
         confirmPassword:"Please write the password again to confirm",
         first_name:"Firstname cannot be left empty",
         last_name:"Lastname cannot be left empty",
-        username:"Username cannot be left empty",
+        photoidnum:"PhotoID number cannot be left empty",
         form:"Please correct all the mistakes before submitting the form",
         signup:"Email or Password is incorrect"
     }
@@ -26,14 +26,14 @@ class UserSignUpComp extends Component{
         password:"",
         first_name:"",
         last_name:"",
-        username:"",
+        photoidnum:"",
         confirmPassword:"",
         errors:{
             email:"",
             password: "",
             first_name:"",
             last_name:"",
-            username:"",
+            photoidnum:"",
             confirmPassword:"",
             form:""
         }
@@ -51,7 +51,7 @@ class UserSignUpComp extends Component{
         const target = e.target.name
         if(val ===""){
             this.setState({...this.state,[e.target.name]:e.target.value,errors:{
-                ...this.state.errors,[target]:this.empty_error_list[target]
+                    ...this.state.errors,[target]:this.empty_error_list[target]
                 }})
             // this.setState({{...this.state, [e.target.name]:e.target.value},
             //     errors:{...this.state.errors,[target]:this.empty_error_list[target]}})
@@ -123,7 +123,7 @@ class UserSignUpComp extends Component{
         const all_form_data = jQuery.extend({},  this.state)
         delete all_form_data.errors;
 
-            // this.state.form_data
+        // this.state.form_data
         let errors = {}
         for (var key in all_form_data) {
             if (all_form_data.hasOwnProperty(key)) {
@@ -167,11 +167,11 @@ class UserSignUpComp extends Component{
         else {
             this.setState({...this.state,errors:{...this.state.errors,form:""}})
             axios
-                .post(global.config.bkend.url+"/buyers/", {
+                .post(global.config.bkend.url+"/sellers/", {
                     first_name:this.state.first_name,
                     last_name:this.state.last_name,
                     email:this.state.email,
-                    username:this.state.username,
+                    photo_id_num:this.state.photoidnum,
                     password:this.state.password
                 })
                 .then(res => {
@@ -200,113 +200,113 @@ class UserSignUpComp extends Component{
                     <hr/>
                 </div>
                 <div className="main-login main-center">
-                        <form className="form-horizontal" action="" onSubmit={this.handleFormSubmission.bind(this)} method="post" >
+                    <form className="form-horizontal" action="" onSubmit={this.handleFormSubmission.bind(this)} method="post" >
 
-                            <div className="form-group">
-                                <label htmlFor="name" className="cols-sm-2 control-label">Your First Name</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
+                        <div className="form-group">
+                            <label htmlFor="name" className="cols-sm-2 control-label">Your First Name</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
                             <span className="input-group-addon"><i className="fa fa-user fa"
                                                                    aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="first_name" id="name" value={this.state.first_name}
-                                               onChange={this.handleChange.bind(this)} placeholder="Enter your first Name"/>
-                                    </div>
-                                    <div className="small text-danger">
-                                        {this.state.errors.first_name}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="name" className="cols-sm-2 control-label">Your Last Name</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                            <span className="input-group-addon"><i className="fa fa-user fa"
-                                                                   aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="last_name" id="name" value={this.state.last_name}
-                                               onChange={this.handleChange.bind(this)} placeholder="Enter your last Name"/>
-                                    </div>
-                                    <div className="small text-danger">
-                                        {this.state.errors.last_name}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="email" className="cols-sm-2 control-label">Your Email</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                                        <span className="input-group-addon"><i className="fa fa-envelope fa" aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="email" id="email"
-                                               value={this.state.email}
-                                               onChange={this.handleChange.bind(this)} placeholder="Enter your Email"/>
-                                    </div>
-                                    <div className="small text-danger">
-                                        {this.state.errors.email}
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="form-group">
-                                <label htmlFor="username" className="cols-sm-2 control-label">Username</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                            <span className="input-group-addon"><i className="fa fa-users fa"
-                                                                   aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="username" id="username"
-                                               value={this.state.username}
-                                               onChange={this.handleChange.bind(this)}  placeholder="Enter your Username"/>
-                                    </div>
+                                    <input type="text" className="form-control" name="first_name" id="name" value={this.state.first_name}
+                                           onChange={this.handleChange.bind(this)} placeholder="Enter your first Name"/>
                                 </div>
                                 <div className="small text-danger">
-                                    {this.state.errors.username}
+                                    {this.state.errors.first_name}
                                 </div>
                             </div>
+                        </div>
+                        <div className="form-group">
+                            <label htmlFor="name" className="cols-sm-2 control-label">Your Last Name</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
+                            <span className="input-group-addon"><i className="fa fa-user fa"
+                                                                   aria-hidden="true"/></span>
+                                    <input type="text" className="form-control" name="last_name" id="name" value={this.state.last_name}
+                                           onChange={this.handleChange.bind(this)} placeholder="Enter your last Name"/>
+                                </div>
+                                <div className="small text-danger">
+                                    {this.state.errors.last_name}
+                                </div>
+                            </div>
+                        </div>
 
-                            <div className="form-group">
-                                <label htmlFor="password" className="cols-sm-2 control-label">Password</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                                        <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
-                                        <input type="password" className="form-control" name="password" id="password"
-                                               value={this.state.password}
-                                               onChange={this.handleChange.bind(this)}  placeholder="Enter your Password"/>
-                                    </div>
-                                    <div  className="small text-danger">
-                                        {this.state.errors.password}
-                                    </div>
+                        <div className="form-group">
+                            <label htmlFor="email" className="cols-sm-2 control-label">Your Email</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
+                                    <span className="input-group-addon"><i className="fa fa-envelope fa" aria-hidden="true"/></span>
+                                    <input type="text" className="form-control" name="email" id="email"
+                                           value={this.state.email}
+                                           onChange={this.handleChange.bind(this)} placeholder="Enter your Email"/>
+                                </div>
+                                <div className="small text-danger">
+                                    {this.state.errors.email}
                                 </div>
                             </div>
+                        </div>
 
-                            <div className="form-group">
-                                <label htmlFor="confirm" className="cols-sm-2 control-label">Confirm Password</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                                        <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
-                                        <input type="password" className="form-control" name="confirmPassword" id="confirm"
-                                               value={this.state.confirmPassword}
-                                               onChange={this.handleChange.bind(this)}
-                                               placeholder="Confirm your Password"/>
-                                    </div>
-                                    <div className="small text-danger">
-                                        {this.state.errors.confirmPassword}
-                                    </div>
+                        <div className="form-group">
+                            <label htmlFor="username" className="cols-sm-2 control-label">Govt. Approved ID No</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
+                            <span className="input-group-addon"><i className="fa fa-users fa"
+                                                                   aria-hidden="true"/></span>
+                                    <input type="text" className="form-control" name="photoidnum" id="photoidnum"
+                                           value={this.state.photoidnum}
+                                           onChange={this.handleChange.bind(this)}  placeholder="Enter your ID Number"/>
                                 </div>
                             </div>
-                            <div className="text-center text-danger">
-                                {this.state.errors.form}
+                            <div className="small text-danger">
+                                {this.state.errors.photoidnum}
                             </div>
-                            <div className="form-group ">
-                                <button type="button" type="submit" className="btn btn-primary btn-lg btn-block login-button">Register</button>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="password" className="cols-sm-2 control-label">Password</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
+                                    <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                    <input type="password" className="form-control" name="password" id="password"
+                                           value={this.state.password}
+                                           onChange={this.handleChange.bind(this)}  placeholder="Enter your Password"/>
+                                </div>
+                                <div  className="small text-danger">
+                                    {this.state.errors.password}
+                                </div>
                             </div>
-                            <div className="login-register">
-                                <Link  to="/usersignin">Login</Link>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="confirm" className="cols-sm-2 control-label">Confirm Password</label>
+                            <div className="cols-sm-10">
+                                <div className="input-group">
+                                    <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                    <input type="password" className="form-control" name="confirmPassword" id="confirm"
+                                           value={this.state.confirmPassword}
+                                           onChange={this.handleChange.bind(this)}
+                                           placeholder="Confirm your Password"/>
+                                </div>
+                                <div className="small text-danger">
+                                    {this.state.errors.confirmPassword}
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                        <div className="text-center text-danger">
+                            {this.state.errors.form}
+                        </div>
+                        <div className="form-group ">
+                            <button type="button" type="submit" className="btn btn-primary btn-lg btn-block login-button">Register</button>
+                        </div>
+                        <div className="login-register">
+                            <Link  to="/usersignin">Login</Link>
+                        </div>
+                    </form>
+                </div>
             </React.Fragment>
 
         );
     }
 }
-export default UserSignUpComp
+export default SellerSignUpComp
 
