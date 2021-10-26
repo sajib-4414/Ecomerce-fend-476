@@ -1,12 +1,12 @@
 import './css/App.css';
-import NavComp from './components/NavComp'
-import Footer from "./components/Footer";
+import NavComp from './components/navheaderfooter/NavComp'
+import Footer from "./components/navheaderfooter/Footer";
 import HomePageComp from "./components/HomePageComp";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import UserLoginComp from "./components/UserLoginComp";
 import SellerLoginComp from "./components/SellerLoginComp";
-import UserSignUpComp from "./components/UserSignUpComp";
-import SellerRegisterComp from "./components/SellerRegisterComp";
+import UserSignUpComp from "./components/signup/UserSignUpComp";
+import SellerSignupComp from "./components/signup/SellerSignupComp";
 import ProductListForSellerComp from "./components/ProductListForSellerComp";
 import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
 import CheckoutPageComp from "./components/CheckoutPageComp";
@@ -197,7 +197,7 @@ class App extends Component{
                             <Route exact path="/usersignin" component={UserLoginComp}/>
                             <Route exact path="/sellersignin" component={SellerLoginComp}/>
                             <Route exact path="/userregister" component={UserSignUpComp}/>
-                            <Route exact path="/sellerregister" component={SellerRegisterComp}/>
+                            <Route exact path="/sellerregister" component={SellerSignupComp}/>
                             <Route exact path="/productlistforseller" component={ProductListForSellerComp}/>
                             <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
