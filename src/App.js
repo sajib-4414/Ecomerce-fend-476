@@ -7,13 +7,13 @@ import UserLoginComp from "./components/UserLoginComp";
 import SellerLoginComp from "./components/SellerLoginComp";
 import UserSignUpComp from "./components/signup/UserSignUpComp";
 import SellerSignupComp from "./components/signup/SellerSignupComp";
-import ProductListForSellerComp from "./components/ProductListForSellerComp";
+import ProductListForSellerComp from "./components/ProductListForSeller/ProductListForSellerComp";
 import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
 import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
-import ProductListUnified from "./components/ProductListUnified";
+import ProductListUnified from "./components/ProductListForConsumer/ProductListUnified";
 import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
 //import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
@@ -177,6 +177,15 @@ class App extends Component{
             user:{}
         })
     }
+    getSellerPK(){
+        if (Object.keys(this.state.user) !=0){
+            if ('seller' in this.state.user){
+                const seller = this.state.user.seller
+                return seller.pk
+            }
+        }
+        return ""
+    }
     render() {
         let boundMethod = this.handleAddToCartProduct.bind(this)
         let passingProps = {
@@ -189,6 +198,7 @@ class App extends Component{
                     cartitemquantity = {this.getTotalItemsQuantity()}
                     currentUserType={this.getCurrentUserType()}
                     currentUserName={this.getCurrentUserName()}
+                    seller_pk = {this.getSellerPK()}
                     />
                     <div className="container">
 
@@ -198,7 +208,7 @@ class App extends Component{
                             <Route exact path="/sellersignin" component={SellerLoginComp}/>
                             <Route exact path="/userregister" component={UserSignUpComp}/>
                             <Route exact path="/sellerregister" component={SellerSignupComp}/>
-                            <Route exact path="/productlistforseller" component={ProductListForSellerComp}/>
+                            <Route exact path="/productlistforseller/:sellerId" component={ProductListForSellerComp}/>
                             <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addproduct" component={AddProductForSeller}/>

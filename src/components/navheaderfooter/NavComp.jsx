@@ -3,10 +3,8 @@ import { Dropdown } from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
 class NavComp extends Component{
-    // state={
-    //     currentUserType:this.props.currentUserType,
-    //     currentUserName:""
-    // }
+
+
     // componentDidMount() {
     //     var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
     //     if(retrievedUser !==null){
@@ -25,6 +23,9 @@ class NavComp extends Component{
     //         })
     //     }
     // }
+    getMyProductURL(){
+        return "/productlistforseller/"+this.props.seller_pk+"/"
+    }
 
     render() {
         return(
@@ -45,7 +46,7 @@ class NavComp extends Component{
                     {this.props.currentUserType=="seller"?
                         <React.Fragment>
                             <Link className="p-2 text-dark" to="/">My Profile </Link>
-                            <Link className="p-2 text-dark" to="/productlistforseller">My added products </Link>
+                            <Link className="p-2 text-dark" to={this.getMyProductURL()}>My added products </Link>
                             <Link className="p-2 text-dark" to="/addproduct">Add a product </Link>
                         </React.Fragment>
                         :
