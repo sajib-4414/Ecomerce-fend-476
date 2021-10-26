@@ -153,7 +153,7 @@ class SellerLoginComp extends Component{
                         <div id="login-column" className="col-md-6">
                             <div id="login-box" className="col-md-12">
                                 <form id="login-form" className="form" action="" onSubmit={this.handleLoginSubmit.bind(this)} method="post">
-                                    <h3 className="text-center">Consumers Login Here: </h3>
+                                    <h3 className="text-center">Sellers sign in Here: </h3>
                                     <div className="form-group">
                                         <label htmlFor="username">Email:</label><br/>
                                         <input type="text" name="email" id="username" value={this.state.email} onChange={this.handleChange.bind(this)} className="form-control"/>
@@ -179,7 +179,7 @@ class SellerLoginComp extends Component{
                                         {this.state.errors.form}
                                     </div>
                                     <div id="register-link" className="text-right">
-                                        <Link  to="/userregister">To be a new seller click here</Link>
+                                        <Link  to="/sellerregister">To be a new seller click here</Link>
                                     </div>
                                 </form>
                             </div>
