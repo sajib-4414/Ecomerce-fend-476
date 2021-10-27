@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import '../css/add_product_seller.css'
 import Select from 'react-select'
 import {Link} from "react-router-dom";
-import jQuery from "jquery";
 import axios from "axios";
-import ProductListForSellerRow from "./ProductListForSeller/ProductListForSellerRow";
 import {toast, Toaster} from "react-hot-toast";
 
 class AddProductForSeller extends Component{
@@ -209,7 +207,14 @@ class AddProductForSeller extends Component{
                 seller_id:seller_id
             })
             .then(res => {
-                window.location.href = '/productlistforseller/'+seller_id+'/';
+                var r = window.confirm("Product Added!\nDo you want to add another product?");
+                if (r == true) {
+                    //do nothing
+                } else {
+                    window.location.href = '/productlistforseller/'+seller_id+'/'
+                }
+
+
             })
             .catch(errors=>{
                 console.log(errors.response)
