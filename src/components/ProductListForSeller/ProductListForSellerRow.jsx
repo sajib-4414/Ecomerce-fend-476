@@ -36,7 +36,9 @@ class ProductListForSellerRow extends Component {
         // let {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
         return(
             <tr>
-                <td>{this.state.product.name}</td>
+                <td>
+                    <Link to={'/addeditproduct?editProduct='+this.state.product.pk}>{this.state.product.name}</Link>
+                   </td>
                 <td>
                     {this.state.product.company.company_name}
 

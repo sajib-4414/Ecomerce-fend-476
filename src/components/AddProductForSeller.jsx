@@ -20,27 +20,51 @@ class AddProductForSeller extends Component{
         quantity: "Quantity cannot be a negative value",
         delivery_cost: "Delivery cost cannot be a negative value"
     }
-    state = {
-        form_data: {
-            name: "",
-            price: "",
-            quantity: "",
-            delivery_cost: "",
-            category_id: "",
-            company_id: "",
-        },
-        errors: {
-            name: "",
-            price: "",
-            quantity: "",
-            delivery_cost: "",
-            category_id: "",
-            company_id: "",
-            form:""
-        },
-        categories:[],
-        companies:[]
+    constructor(props) {
+        super(props);
+        const search_params_str =this.props.location.search
+        let editMode = false
+        let productId = 0
+        if(search_params_str.length ===0 ){
+            console.log("No search param")
+            //means product add mode
+        }
+        else
+        {
+            //product edit mode
+            productId = search_params_str.split("=")[1];
+            if(productId >0){
+                //valid product id
+                editMode = true
+            }
+        }
+        this.state = {
+            form_data: {
+                name: "",
+                price: "",
+                quantity: "",
+                delivery_cost: "",
+                category_id: "",
+                company_id: "",
+            },
+            errors: {
+                name: "",
+                price: "",
+                quantity: "",
+                delivery_cost: "",
+                category_id: "",
+                company_id: "",
+                form:""
+            },
+            categories:[],
+            companies:[],
+            editMode:editMode,
+            productId:productId,
+            default_company:{},
+            default_category:{}
+        }
     }
+
     setCompanyAndCategoryInState(companyResponse,categoryResponse){
         const companies = companyResponse.data
         const categories = categoryResponse.data
@@ -83,7 +107,50 @@ class AddProductForSeller extends Component{
             axios.get(global.config.bkend.url+"/categories/"),
             axios.get(global.config.bkend.url+"/companies/")
         ]);
-        this.setCompanyAndCategoryInState(companyListResponse,categoryListResponse)
+        if(this.state.editMode){
+            //is for edit
+            //fetch the product
+            axios
+                .get(global.config.bkend.url+"/products/"+this.state.productId+"/")
+                .then(response =>
+                    {
+                        // this.setCartDataInState(response)
+                        const product = response.data
+                        const categories = categoryListResponse.data
+                        const companies = companyListResponse.data
+                        const companies_to_add = []
+                        companies.map(company=>{
+                            companies_to_add.push({value:company.pk,label:company.company_name})
+                        })
+                        const categories_to_add = []
+                        categories.map(category=>{
+                            categories_to_add.push({value:category.pk,label:category.name})
+                        })
+                        //const s_company =
+                        //const temp_array = []
+                        //temp_array.push()
+                        this.setState({...this.state,form_data: {
+                                name: product.name,
+                                price: product.price,
+                                quantity: product.quantity,
+                                delivery_cost: product.delivery_cost,
+                                category_id: product.category.pk,
+                                company_id: product.company.pk,
+                            }, categories:categories_to_add,companies:companies_to_add,
+                            //default_company:companies_to_add[0],
+                         default_company:{value:product.company.pk,label:product.company.company_name},
+                        default_category:{value:product.category.pk,label:product.category.name}})
+                    }
+                )
+                .catch(error=>{
+
+                })
+        }
+        else{
+            //add new product
+            this.setCompanyAndCategoryInState(companyListResponse,categoryListResponse)
+        }
+
         // this.setState({...this.state,categories:categoryListResponse.data,companies:companyListResponse.data})
     }
     handleCategoryChange = (selectedOption) => {
@@ -196,33 +263,64 @@ class AddProductForSeller extends Component{
             return;
         }
             //so we have a valid seller id
-        axios
-            .post(global.config.bkend.url+"/products/", {
-                name:this.state.form_data.name,
-                price:this.state.form_data.price,
-                quantity:this.state.form_data.quantity,
-                delivery_cost:this.state.form_data.delivery_cost,
-                category_id:this.state.form_data.category_id,
-                company_id:this.state.form_data.company_id,
-                seller_id:seller_id
-            })
-            .then(res => {
-                var r = window.confirm("Product Added!\nDo you want to add another product?");
-                if (r == true) {
-                    //do nothing
-                } else {
-                    window.location.href = '/productlistforseller/'+seller_id+'/'
-                }
+        if(this.state.editMode){
+            //edit the product
+            axios
+                .put(global.config.bkend.url+"/products/"+this.state.productId+"/", {
+                    name:this.state.form_data.name,
+                    price:this.state.form_data.price,
+                    quantity:this.state.form_data.quantity,
+                    delivery_cost:this.state.form_data.delivery_cost,
+                    category_id:this.state.form_data.category_id,
+                    company_id:this.state.form_data.company_id
+                })
+                .then(res => {
+                    var r = window.confirm("Product Editted successfully!\nDo you want to edit again?");
+                    if (r == true) {
+                        //do nothing
+                    } else {
+                        window.location.href = '/productlistforseller/'+seller_id+'/'
+                    }
 
+                })
+                .catch(errors=>{
+                    console.log(errors.response)
+                    const error_response = errors.response
+                    if(error_response.status === 400){
+                        this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
+                    }
+                });
+        }
+        else{
+            //adding product
+            axios
+                .post(global.config.bkend.url+"/products/", {
+                    name:this.state.form_data.name,
+                    price:this.state.form_data.price,
+                    quantity:this.state.form_data.quantity,
+                    delivery_cost:this.state.form_data.delivery_cost,
+                    category_id:this.state.form_data.category_id,
+                    company_id:this.state.form_data.company_id,
+                    seller_id:seller_id
+                })
+                .then(res => {
+                    var r = window.confirm("Product Added!\nDo you want to add another product?");
+                    if (r == true) {
+                        //do nothing
+                    } else {
+                        window.location.href = '/productlistforseller/'+seller_id+'/'
+                    }
 
-            })
-            .catch(errors=>{
-                console.log(errors.response)
-                const error_response = errors.response
-                if(error_response.status === 400){
-                    this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
-                }
-            });
+                })
+                .catch(errors=>{
+                    console.log(errors.response)
+                    const error_response = errors.response
+                    if(error_response.status === 400){
+                        this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
+                    }
+                });
+        }
+
 
 
 
@@ -238,7 +336,13 @@ class AddProductForSeller extends Component{
             <div className="width-shrink ">
                 <div><Toaster/></div>
                 <div className="py-5 text-center">
-                    <h2>Add Product </h2>
+                    {this.state.editMode?
+                        <h2>Edit your Product </h2>
+                        :
+                        <h2>Add Product </h2>
+                    }
+
+
                 </div>
 
                 <div className="row justify-content-center">
@@ -291,6 +395,7 @@ class AddProductForSeller extends Component{
 
                                 <Select
                                     name="category_id"
+                                     value={this.state.default_category}
                                     onChange={this.handleCategoryChange.bind(this)}
                                     options={this.state.categories} />
 
@@ -306,6 +411,7 @@ class AddProductForSeller extends Component{
 
                                 <Select
                                     name="company_id"
+                                    value={this.state.default_company}
                                     onChange={this.handleCompanyChange.bind(this)}
                                     options={this.state.companies} />
                                 <div className="small text-danger">
@@ -316,8 +422,14 @@ class AddProductForSeller extends Component{
                                 {this.state.errors.form}
                             </div>
                             <br/>
-                            <button className="btn btn-primary btn-lg btn-block" type="submit">Confirm and Add Product
-                            </button>
+                            {this.state.editMode?
+                                <button className="btn btn-primary btn-lg btn-block" type="submit">Submit & Edit Product
+                                </button>
+                                :
+                                <button className="btn btn-primary btn-lg btn-block" type="submit">Confirm and Add Product
+                                </button>
+                            }
+
                         </form>
                     </div>
                 </div>

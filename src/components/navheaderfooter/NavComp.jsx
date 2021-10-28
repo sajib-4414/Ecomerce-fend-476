@@ -23,9 +23,9 @@ class NavComp extends Component{
     //         })
     //     }
     // }
-    getMyProductURL(){
-        return "/productlistforseller/"+this.props.seller_pk+"/"
-    }
+    // getMyProductURL(){
+    //     return "/productlistforseller/"+this.props.seller_pk+"/"
+    // }
 
     render() {
         return(
@@ -46,8 +46,8 @@ class NavComp extends Component{
                     {this.props.currentUserType=="seller"?
                         <React.Fragment>
                             <Link className="p-2 text-dark" to="/">My Profile </Link>
-                            <Link className="p-2 text-dark" to={this.getMyProductURL()}>My added products </Link>
-                            <Link className="p-2 text-dark" to="/addproduct">Add a product </Link>
+                            <Link className="p-2 text-dark" to={"/productlistforseller/"+this.props.seller_pk+"/"}>My added products </Link>
+                            <Link className="p-2 text-dark" to="/addeditproduct">Add a product </Link>
                         </React.Fragment>
                         :
                         <React.Fragment>

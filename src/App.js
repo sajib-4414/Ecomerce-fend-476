@@ -211,7 +211,7 @@ class App extends Component{
                             <Route exact path="/productlistforseller/:sellerId" component={ProductListForSellerComp}/>
                             <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
-                            <Route exact path="/addproduct" component={AddProductForSeller}/>
+                            <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
                             <Route exact path="/shoppingcart"
                                    render={(props) => (
