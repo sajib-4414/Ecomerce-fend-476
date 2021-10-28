@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import '../css/sellerproductlist.css'
+import '../../css/sellerproductlist.css'
 import axios from "axios";
 import ProductListUnifiedSubListComp from "./ProductListUnifiedSubListComp";
-import '../config';
+import '../../config';
 import queryString from "querystring";
+import {toast, Toaster} from "react-hot-toast";
 
 class ProductListUnified extends Component{
 
@@ -119,9 +120,14 @@ class ProductListUnified extends Component{
         // console.log(this.props)
         this.props.handleAddToCartToAppJS(pk)
     }
+    showToast(){
+        toast.error("Please log in to add products to cart")
+        // toast("Please log in to add products to cart")
+    }
     render() {
         return(
             <div className="row">
+                <div><Toaster/></div>
                 <div className="col-xl-12">
                     <div className="card">
                         <div className="card-body">
@@ -141,6 +147,7 @@ class ProductListUnified extends Component{
                                     <ProductListUnifiedSubListComp
                                     products={this.state.products}
                                     handleCartAddToParent = { this.handleDataPropagation.bind(this)}
+                                    handleShowToast={this.showToast.bind(this)}
                                     />
 
                                     </tbody>

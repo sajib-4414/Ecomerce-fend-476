@@ -1,28 +1,31 @@
 import React, {Component } from 'react'
-import axios from "axios";
 import {Link} from "react-router-dom";
-import {ToastHeader} from "react-bootstrap";
 class ProductListUnifiedProductRow extends Component {
     checkStock(quantity){
-        if (quantity>0){
-            return true
-        }
-        return false
+        return quantity>0
+        // if (quantity>0){
+        //     return true
+        // }
+        // return false
     }
+
     handleAddToCart(pk) {
         // alert("I got pk"+pk)
         // alert("Added to cart"+pk)
-        this.props.handleCartAdd(pk)
+
+            this.props.handleCartAdd(pk)
+
+
         // this.props.handleCartAdd(pk)
     }
     // {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
     getCompanyURL() {
-        console.log("printing the company")
+        //console.log("printing the company")
         const product = this.props.product
         const company = product.company
-        console.log(company)
-        const url = "/productlist?company_id=" + company.pk
-        return url
+       // console.log(company)
+        // const url =
+        return "/productlist?company_id=" + company.pk+"/"
     }
 
     render (){

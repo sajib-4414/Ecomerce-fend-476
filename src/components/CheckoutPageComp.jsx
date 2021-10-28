@@ -92,8 +92,8 @@ class CheckoutPageComp extends Component{
             axios.get(global.config.bkend.url+"/buyers/1/"),
             axios.get(global.config.bkend.url+"/cart-carlines-by-user/1/")
         ]);
-        console.log("printing profile response data")
-        console.log(profileResponse.data)
+        //console.log("printing profile response data")
+        //console.log(profileResponse.data)
         this.setState({
             profile: profileResponse.data,
             address:profileResponse.data.address,
@@ -141,7 +141,7 @@ class CheckoutPageComp extends Component{
                     break
             }
         }
-        alert("submitted"+isAnyErrorFound)
+        //alert("submitted"+isAnyErrorFound)
         if(isAnyErrorFound){
             return
         }

@@ -1,25 +1,26 @@
 import './css/App.css';
-import NavComp from './components/NavComp'
-import Footer from "./components/Footer";
+import NavComp from './components/navheaderfooter/NavComp'
+import Footer from "./components/navheaderfooter/Footer";
 import HomePageComp from "./components/HomePageComp";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 import UserLoginComp from "./components/UserLoginComp";
 import SellerLoginComp from "./components/SellerLoginComp";
-import UserSignUpComp from "./components/UserSignUpComp";
-import SellerRegisterComp from "./components/SellerRegisterComp";
-import ProductListForSellerComp from "./components/ProductListForSellerComp";
+import UserSignUpComp from "./components/signup/UserSignUpComp";
+import SellerSignupComp from "./components/signup/SellerSignupComp";
+import ProductListForSellerComp from "./components/ProductListForSeller/ProductListForSellerComp";
 import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
 import CheckoutPageComp from "./components/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
 import ShoppingCartComp from "./components/ShoopingCart";
-import ProductListUnified from "./components/ProductListUnified";
+import ProductListUnified from "./components/ProductListForConsumer/ProductListUnified";
 import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
 //import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
 import { Component } from "react";
 import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetailsPage";
 import LogOutComponent from "./components/LogOutComponent";
+import SignUpSuccess from "./components/SignUpSuccess";
 
 //this is a special wrapper component that allows passing a prop to a router component
 //this also retains the component's capability to receive location prop
@@ -53,11 +54,11 @@ class App extends Component{
         user:{}
     }
     callCartCarLinesApiAndUpdateState(){
-        console.log("callcartcarlinesapi called")
+       // console.log("callcartcarlinesapi called")
         var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
         if (retrievedUser === null)
         {
-            console.log("retrieved user is null")
+           // console.log("retrieved user is null")
             return
             //no user saved
         }
@@ -176,6 +177,15 @@ class App extends Component{
             user:{}
         })
     }
+    getSellerPK(){
+        if (Object.keys(this.state.user) !=0){
+            if ('seller' in this.state.user){
+                const seller = this.state.user.seller
+                return seller.pk
+            }
+        }
+        return ""
+    }
     render() {
         let boundMethod = this.handleAddToCartProduct.bind(this)
         let passingProps = {
@@ -188,6 +198,7 @@ class App extends Component{
                     cartitemquantity = {this.getTotalItemsQuantity()}
                     currentUserType={this.getCurrentUserType()}
                     currentUserName={this.getCurrentUserName()}
+                    seller_pk = {this.getSellerPK()}
                     />
                     <div className="container">
 
@@ -196,11 +207,11 @@ class App extends Component{
                             <Route exact path="/usersignin" component={UserLoginComp}/>
                             <Route exact path="/sellersignin" component={SellerLoginComp}/>
                             <Route exact path="/userregister" component={UserSignUpComp}/>
-                            <Route exact path="/sellerregister" component={SellerRegisterComp}/>
-                            <Route exact path="/productlistforseller" component={ProductListForSellerComp}/>
+                            <Route exact path="/sellerregister" component={SellerSignupComp}/>
+                            <Route exact path="/productlistforseller/:sellerId" component={ProductListForSellerComp}/>
                             <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
-                            <Route exact path="/addproduct" component={AddProductForSeller}/>
+                            <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
                             <Route exact path="/shoppingcart"
                                    render={(props) => (
@@ -228,6 +239,7 @@ class App extends Component{
                                        <LogOutComponent
                                            notifyAppJSLogOut={this.handleLogout.bind(this)}
                                        />)} />
+                            <Route exact path="/signupsuccess" component={SignUpSuccess}/>
                             />
                         </Switch>
 

@@ -1,3 +1,5 @@
+const local = "http://127.0.0.1:8000"
+const remote= "https://arefin4414.pythonanywhere.com"
 module.exports = global.config = {
     // i18n: {
     //     welcome: {
@@ -7,7 +9,8 @@ module.exports = global.config = {
     //     // rest of your translation object
     // }
     // other global config variables you wish
+
     bkend:{
-        url:"https://arefin4414.pythonanywhere.com"
+        url:remote
     }
 };
