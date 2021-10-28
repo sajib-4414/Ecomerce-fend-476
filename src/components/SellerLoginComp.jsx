@@ -178,7 +178,7 @@ class SellerLoginComp extends Component{
                                     <div className="text-center text-danger">
                                         {this.state.errors.form}
                                     </div>
-                                    <div id="register-link" className="text-right">
+                                    <div id="register-link" className="text-center">
                                         <Link  to="/userregister">To be a new seller click here</Link>
                                     </div>
                                 </form>
