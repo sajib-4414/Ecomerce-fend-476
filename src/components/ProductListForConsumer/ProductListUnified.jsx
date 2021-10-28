@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import '../css/sellerproductlist.css'
+import '../../css/sellerproductlist.css'
 import axios from "axios";
 import ProductListUnifiedSubListComp from "./ProductListUnifiedSubListComp";
-import '../config';
+import '../../config';
 import queryString from "querystring";
 import {toast, Toaster} from "react-hot-toast";
 

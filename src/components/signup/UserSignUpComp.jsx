@@ -184,7 +184,6 @@ class UserSignUpComp extends Component{
                         this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
                     }
                 });
-            //now submit the form
 
         }
 
