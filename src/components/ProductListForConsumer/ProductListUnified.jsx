@@ -61,6 +61,9 @@ class ProductListUnified extends Component{
             else if (this.state.queryBy ==='company'){
                 url = global.config.bkend.url+"/products-by-company/"+this.state.queryByValue+"/";
             }
+            else if (this.state.queryBy ==='search'){
+                url = global.config.bkend.url+"/products-by-search-keywords/"+this.state.queryByValue+"/";
+            }
             console.log("calling the API:"+url)
             axios
                 .get(url)

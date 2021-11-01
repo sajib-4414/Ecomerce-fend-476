@@ -3,6 +3,9 @@ import { Dropdown } from 'react-bootstrap';
 import {Link} from "react-router-dom";
 
 class NavComp extends Component{
+    state = {
+        search_text:""
+    }
 
 
     // componentDidMount() {
@@ -33,9 +36,25 @@ class NavComp extends Component{
                 className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
                 <h5 className="my-0 mr-md-auto font-weight-normal">Sam-Caleb Marketplace</h5>
                 {this.props.currentUserType=="seller"?"":
-                    <form className="form-inline my-2 my-lg-0">
-                        <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                        <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    <form className="form-inline my-2 my-lg-0"
+                          onSubmit={formEvent=>{
+                              formEvent.preventDefault()
+                              window.location.href = '/productlist?search_query='+this.state.search_text
+                            }
+                          }
+                    >
+                        <input
+                            value={this.state.search_text}
+                            onChange={(event)=>{
+                                const val = event.target.value
+                                this.setState({search_text:val})
+                                }
+                            }
+                            className="form-control mr-sm-2"
+                            type="search" placeholder="Search"
+                            aria-label="Search"/>
+                        <Link to={'/productlist?search_query='+this.state.search_text} className="btn btn-outline-success my-2 my-sm-0">Search</Link>
+                        {/*<button className="btn btn-outline-success my-2 my-sm-0">Search</button>*/}
                     </form>
                 }
 
