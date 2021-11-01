@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import axios from "axios";
 import ShoppingCartItemsComp from "./ShoppingCartItemsComp";
 import {Link} from "react-router-dom";
+import {toast, Toaster} from "react-hot-toast";
 
 class ShoppingCartComp extends Component{
     state = {
         carlines: this.props.initialCartLines,
         subtotal:this.getSubTotalPrice(this.props.initialCartLines),
         shipping:this.getShippingCost(this.props.initialCartLines),
-        finaltotal:this.getSubTotalPrice(this.props.initialCartLines) + this.getShippingCost(this.props.initialCartLines)
+        finaltotal:this.getSubTotalPrice(this.props.initialCartLines) + this.getShippingCost(this.props.initialCartLines),
+        buyer:{}
     }
     getSubTotalPrice(cartLines){
         // this.state.cartLineItem.product.price,this.state.cartLineItem.quantity
@@ -27,9 +29,33 @@ class ShoppingCartComp extends Component{
         });
         return totalShippingCost
     }
-    getCartLines(){
+    getCartLinesAndUserAndUpdateState(){
+        let buyer = null
+        if(Object.keys(this.state.buyer).length ===0)
+        {
+            //there is no buyer in the state
+            //have to check if there is a buyer in local storage
+            var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+            if(retrievedUser === null){
+                toast.error("Cart update error, login as a user and try again")
+                return
+            }
+            else if('seller' in retrievedUser){
+                toast.error("Cart update error, login as a user and try again")
+                return
+            }
+            else if ('buyer' in retrievedUser){
+                //ok so we see there is a user in the localstorage, means a buyer is logged in
+                //we can now attempt to fetch the carlines for him
+                buyer = retrievedUser.buyer
+            }
+        }
+        else{
+            //there is a buyer saved in the state before
+            buyer = this.state.buyer
+        }
         axios
-            .get(global.config.bkend.url+"/cart-carlines-by-user/1/")
+            .get(global.config.bkend.url+"/cart-carlines-by-user/"+buyer.pk+"/")
             .then(response =>
                 {
                     // const datacart = response.data
@@ -38,25 +64,28 @@ class ShoppingCartComp extends Component{
                         carlines:datacartlines,
                         subtotal:this.getSubTotalPrice(datacartlines),
                         shipping:this.getShippingCost(datacartlines),
-                        finaltotal:this.getShippingCost(datacartlines)+this.getSubTotalPrice(datacartlines)
+                        finaltotal:this.getShippingCost(datacartlines)+this.getSubTotalPrice(datacartlines),
+                        buyer:buyer
                     })
 
-                }
+                })
 
-            )
+
     }
     componentDidMount() {
-        this.getCartLines();
+        this.getCartLinesAndUserAndUpdateState();
 
     }
     handleItemChange = ()=>{
         this.props.notifyAppJSToUpdateCart()
-        this.getCartLines();
+       // alert("I am notified of the change")
+        this.getCartLinesAndUserAndUpdateState();
     }
 
     render() {
         return(
             <div className="container">
+                <div><Toaster/></div>
                 <div className="row">
                     <div className="col-sm-12 col-md-10 col-md-offset-1">
                         <table className="table table-hover">
@@ -72,7 +101,7 @@ class ShoppingCartComp extends Component{
                             <tbody>
                             <ShoppingCartItemsComp
                             cartLines = {this.props.initialCartLines}
-                            notifyShoppingCart={this.handleItemChange}
+                            notifyShoppingCart={this.handleItemChange.bind(this)}
                             />
 
                             {/*<tr>*/}
