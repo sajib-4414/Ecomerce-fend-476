@@ -25,7 +25,7 @@ class ProductListUnifiedProductRow extends Component {
         const company = product.company
        // console.log(company)
         // const url =
-        return "/productlist?company_id=" + company.pk+"/"
+        return "/productlist?company_id=" + company.pk
     }
 
     render (){

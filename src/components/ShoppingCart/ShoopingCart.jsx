@@ -66,7 +66,7 @@ class ShoppingCartComp extends Component{
                                 <th>Quantity</th>
                                 <th className="text-center">Price</th>
                                 <th className="text-center">Total</th>
-                                <th></th>
+                                <th/>
                             </tr>
                             </thead>
                             <tbody>
@@ -101,33 +101,33 @@ class ShoppingCartComp extends Component{
                             {/*    </td>*/}
                             {/*</tr>*/}
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td/>
+                                <td/>
+                                <td/>
                                 <td><h5>Subtotal</h5></td>
                                 <td className="text-right"><h5><strong>${this.state.subtotal}</strong></h5></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td/>
+                                <td/>
+                                <td/>
                                 <td><h5>Estimated shipping</h5></td>
                                 <td className="text-right"><h5><strong>${this.state.shipping}</strong></h5></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td/>
+                                <td/>
+                                <td/>
                                 <td><h3>Total</h3></td>
                                 <td className="text-right"><h3><strong>${this.state.finaltotal}</strong></h3></td>
                             </tr>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td/>
+                                <td/>
+                                <td/>
                                 <td>
                                     <Link className="btn btn-default" to="/">
-                                        <span className="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                                        <span className="glyphicon glyphicon-shopping-cart"/> Continue Shopping
                                     </Link>
 
 
@@ -138,7 +138,7 @@ class ShoppingCartComp extends Component{
                                     {/*    <span className="glyphicon glyphicon-shopping-cart"></span> Continue Shopping*/}
                                     {/*</Link>*/}
                                     <Link className="btn btn-success" to="/checkoutpage">
-                                        <span className="glyphicon glyphicon-shopping-cart"></span> Checkout
+                                        <span className="glyphicon glyphicon-shopping-cart"/> Checkout
                                     </Link>
                                     {/*<button type="button" className="btn btn-success">*/}
                                     {/*    Checkout <span className="glyphicon glyphicon-play"></span>*/}

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import BannerComp from "./BannerComp";
-import ProductListComp from "./ProductListComp";
+import GridProductListComp from "./GridProductListComp";
 
 class HomePageComp extends Component{
     render() {
         return(
             <React.Fragment>
                 <BannerComp/>
-                <ProductListComp/>
+                <GridProductListComp/>
             </React.Fragment>
         );
     }

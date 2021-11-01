@@ -1,5 +1,7 @@
 import React, {Component } from 'react'
 import {Link} from "react-router-dom";
+import {Button} from "react-bootstrap";
+import axios from "axios";
 class ProductListForSellerRow extends Component {
     state = {
         product:this.props.product
@@ -31,7 +33,25 @@ class ProductListForSellerRow extends Component {
     //     // const url =
     //     return "/productlist?company_id=" + company.pk+"/"
     // }
+    handleDelete(){
+        var windowResponse = window.confirm("Are you sure to delete the product?");
+        if (windowResponse == false) {
+            //do nothing
+            return
+        }
+        //axios delete product and notify the list comp
+        axios
+            .delete(global.config.bkend.url+"/products/"+this.state.product.pk+"/")
+            .then(response =>
+                {
+                    // this.setCartDataInState(response)
+                    this.props.deleteHandler()
+                }
+            )
+            .catch(error=>{
 
+            })
+    }
     render (){
         // let {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
         return(
@@ -52,8 +72,9 @@ class ProductListForSellerRow extends Component {
                 {/*    <td><span className='text-danger'><b>No</b></span></td>*/}
                 {/*}*/}
 
-                <td>{this.state.product.price}</td>
-                <td>{this.state.product.quantity}</td>
+                <td className='text-center'>{this.state.product.price}</td>
+                <td className='text-center'>{this.state.product.quantity}</td>
+                <td><Button className='btn btn-danger' onClick={this.handleDelete.bind(this)}>Delete</Button></td>
             </tr>
         )
     }

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import '../css/sellerproductlist.css'
+import '../../css/sellerproductlist.css'
 import axios from "axios";
-import CheckoutPageProductsListComp from "./CheckoutPageProductsListComp";
 import PreviousOrdersListSubComp from "./PreviousOrdersListSubComp";
 
 class UserPreviousOrdersComp extends Component{
