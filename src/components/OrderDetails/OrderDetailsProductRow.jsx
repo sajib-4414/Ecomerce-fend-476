@@ -7,9 +7,7 @@ class OrderDetailsProductRow extends Component{
     }
     getTotalPrice(){
         const orderline = this.props.orderline
-        const total = orderline.product.price*orderline.quantity
-        // console.log(" I am printing totoal price"+total)
-        return total
+        return orderline.product.price*orderline.quantity
     }
     render() {
         return(
