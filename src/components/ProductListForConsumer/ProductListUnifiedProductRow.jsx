@@ -32,7 +32,7 @@ class ProductListUnifiedProductRow extends Component {
     let {name, price, quantity,delivery_cost,category,company,seller,pk} = this.props.product
         return(
             <tr>
-                <td>{name}</td>
+                <td><Link to={'productdetails/'+pk+'/'}>{name}</Link></td>
                 <td>
                     <Link className='p-2 text-dark' to={this.getCompanyURL()} >{company.company_name}</Link>
 

@@ -20,6 +20,7 @@ import axios from "axios";
 import OrderDetailsPage from "./components/OrderDetails/OrderDetailsPage";
 import LogOutComponent from "./components/StaticComponents/LogOutComponent";
 import SignUpSuccess from "./components/StaticComponents/SignUpSuccess";
+import ProductDetails from "./components/ProductDetails";
 
 //this is a special wrapper component that allows passing a prop to a router component
 //this also retains the component's capability to receive location prop
@@ -222,6 +223,7 @@ class App extends Component{
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
+                            <Route exact path="/productdetails/:productId" component={ProductDetails}/>
                             <Route exact path="/shoppingcart"
                                    render={(props) => (
                                        <ShoppingCartComp
