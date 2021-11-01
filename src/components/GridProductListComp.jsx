@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class ProductListComp extends Component{
+class GridProductListComp extends Component{
     render() {
         return(
             <React.Fragment>
@@ -103,4 +103,4 @@ class ProductListComp extends Component{
         );
     }
 }
-export default ProductListComp
+export default GridProductListComp

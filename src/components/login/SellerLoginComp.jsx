@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import '../css/userlogin.css'
-import {Link, Redirect} from "react-router-dom";
+import '../../css/userlogin.css'
+import {Link} from "react-router-dom";
 import axios from "axios";
 
 class SellerLoginComp extends Component{
@@ -101,7 +101,6 @@ class SellerLoginComp extends Component{
                 errors['form'] = this.empty_error_list['form']
                 this.setState({...this.state,errors:{...this.state.errors, ...errors}})
                 return
-                console.log(errors)
             }
             else{
                 //we are ready to submit the form
@@ -136,7 +135,7 @@ class SellerLoginComp extends Component{
             .catch(error=>{
                 console.log(error.response)
                 const error_response = error.response
-                if (error_response.status == 404){
+                if (error_response.status === 404){
                     this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['login']}})
                 }
 

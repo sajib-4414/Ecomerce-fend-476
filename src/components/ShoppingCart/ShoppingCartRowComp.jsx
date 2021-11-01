@@ -1,6 +1,6 @@
 import React, {Component } from 'react'
 import axios from "axios";
-import '../css/bootstrap.min.css'
+import '../../css/bootstrap.min.css'
 
 class ShoppingCartRowComp extends Component {
     state = {
@@ -24,7 +24,7 @@ class ShoppingCartRowComp extends Component {
             });
     }
     handleItemSubtract = (cartline_id, quantity)=>{
-        if (quantity == 1) return
+        if (quantity === 1) return
         axios
             .put(global.config.bkend.url+"/cartlines/"+cartline_id+"/", {
                 quantity:quantity-1
@@ -74,7 +74,7 @@ class ShoppingCartRowComp extends Component {
                                     this.handleItemAdd(this.state.cartLineItem.pk, this.state.cartLineItem.quantity)
                                 }}
                                 className="btn">
-                            <i className="far fa-plus-square"></i>
+                            <i className="far fa-plus-square"/>
                         </button>
                     <input type="text" value={this.state.cartLineItem.quantity}
                            style={{maxWidth:'40px',paddingLeft:'0px',paddingRight:'0px'}}
@@ -84,7 +84,7 @@ class ShoppingCartRowComp extends Component {
                                 this.handleItemSubtract(this.state.cartLineItem.pk, this.state.cartLineItem.quantity)
                             }}
                             type="button" className="btn">
-                            <i className="far fa-minus-square"></i>
+                            <i className="far fa-minus-square"/>
                         </button>
                     </div>
                 </td>
@@ -96,7 +96,7 @@ class ShoppingCartRowComp extends Component {
                             this.handleItemRemove(this.state.cartLineItem.pk)
                         }}
                         type="button" className="btn btn-danger">
-                        <span className="glyphicon glyphicon-remove"></span> Remove
+                        <span className="glyphicon glyphicon-remove"/> Remove
                     </button>
                 </td>
             </tr>

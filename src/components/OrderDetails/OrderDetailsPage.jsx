@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import '../css/orderdetails.css'
+import '../../css/orderdetails.css'
 import axios from "axios";
 import OrderDetailsProductsListComp from "./OrderDetailsProductsListComp";
 class OrderDetailsPage extends Component{
@@ -61,7 +61,7 @@ class OrderDetailsPage extends Component{
                 </div>
                 <div className="total">
                     <div className="row">
-                        <div className="col-9"></div>
+                        <div className="col-9"/>
                         <div className="col-3"><big>$CA {this.state.order.value}</big></div>
                     </div>
                 </div>

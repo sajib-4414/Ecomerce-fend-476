@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import '../css/userlogin.css'
-import {Link, Redirect} from "react-router-dom";
+import '../../css/userlogin.css'
+import {Link} from "react-router-dom";
 import axios from "axios";
 
 class UserLoginComp extends Component{
@@ -99,12 +99,9 @@ class UserLoginComp extends Component{
             if (Object.keys(errors).length !== 0){
                 errors['form'] = this.empty_error_list['form']
                 this.setState({...this.state,errors:{...this.state.errors, ...errors}})
-                console.log("I am inside on submit of keys not empty")
                 return
-                console.log(errors)
             }
             else{
-                console.log("I am inside on submit of keys empty")
                 //we are ready to submit the form
                 this.setState({...this.state,errors:{...this.state.errors,form:""}})
             }
@@ -137,7 +134,7 @@ class UserLoginComp extends Component{
             .catch(error=>{
                 console.log(error.response)
                 const error_response = error.response
-                if (error_response.status == 404){
+                if (error_response.status === 404){
                     this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['login']}})
                 }
 

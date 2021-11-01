@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import '../css/usercheckout-form-validation.css'
+import '../../css/usercheckout-form-validation.css'
 import axios from "axios";
 import CheckoutPageProductsListComp from "./CheckoutPageProductsListComp";
-import { useHistory } from "react-router-dom";
 
 class CheckoutPageComp extends Component{
     empty_error_list = {
@@ -125,6 +124,7 @@ class CheckoutPageComp extends Component{
                             break
                         case 'billing_contact_number':
                             errors[key]= "Please enter a valid contact number for shipping updates."
+                        default:
                     }
                 }
 
@@ -142,10 +142,8 @@ class CheckoutPageComp extends Component{
             }
         }
         //alert("submitted"+isAnyErrorFound)
-        if(isAnyErrorFound){
-            return
-        }
-        else {
+
+        if (!isAnyErrorFound) {
             this.setState({...this.state,form_errors:{form_total_error:""}})
             axios
                 .post(global.config.bkend.url+"/orders/", {
@@ -224,7 +222,7 @@ class CheckoutPageComp extends Component{
                                     <label htmlFor="firstName">First name</label>
                                     <input type="text" name="billing_firstname" value={this.state.form_data.billing_firstname} onChange={this.handleChange.bind(this)} className="form-control" id="firstName" placeholder=""
                                            />
-                                        <div name="error_firstname" className="small text-danger">
+                                        <div  className="small text-danger">
                                             {this.state.form_errors.billing_firstname}
                                         </div>
                                 </div>
@@ -232,7 +230,7 @@ class CheckoutPageComp extends Component{
                                     <label htmlFor="lastName">Last name</label>
                                     <input type="text" name="billing_lastname" className="form-control" id="lastName" placeholder="" onChange={this.handleChange.bind(this)} value={this.state.form_data.billing_lastname}
                                            required=""/>
-                                    <div name="error_lastname" className="small text-danger">
+                                    <div  className="small text-danger">
                                         {this.state.form_errors.billing_lastname}
                                     </div>
 
@@ -243,7 +241,7 @@ class CheckoutPageComp extends Component{
                             <div className="mb-3">
                                 <label htmlFor="email">Email <span className="text-muted">(Optional)</span></label>
                                 <input type="email" name="billing_email"  onChange={this.handleChange.bind(this)} value={this.state.form_data.billing_email} className="form-control" id="email" placeholder="you@example.com"/>
-                                <div name="error_lastname" className="small text-danger">
+                                <div className="small text-danger">
                                     {this.state.form_errors.billing_email}
                                 </div>
                                 {/*<div className="invalid-feedback">*/}
@@ -253,7 +251,7 @@ class CheckoutPageComp extends Component{
                             <div className="mb-3">
                                 <label >Contact Number </label>
                                 <input type="text" name="billing_contact_number" onChange={this.handleChange.bind(this)} value ={this.state.form_data.billing_contact_number} className="form-control" id="contactnum" placeholder="Ex: 306-xxx-xxxx"/>
-                                <div name="error_contact_number" className="small text-danger">
+                                <div className="small text-danger">
                                     {this.state.form_errors.billing_contact_number}
                                 </div>
                                 {/*<div className="invalid-feedback">*/}
@@ -319,7 +317,7 @@ class CheckoutPageComp extends Component{
                                     <h4 className="mb-3">Payment</h4> <span>Cash on Delivery (COD)</span>
 
                                     <hr className="mb-4"/>
-                                <div name="error_firstname" className="text-danger text-center">
+                                <div className="text-danger text-center">
                                     {this.state.form_errors.form_total_error}
                                 </div>
                             <br/>

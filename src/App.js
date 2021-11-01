@@ -3,24 +3,23 @@ import NavComp from './components/navheaderfooter/NavComp'
 import Footer from "./components/navheaderfooter/Footer";
 import HomePageComp from "./components/HomePageComp";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
-import UserLoginComp from "./components/UserLoginComp";
-import SellerLoginComp from "./components/SellerLoginComp";
+import UserLoginComp from "./components/login/UserLoginComp";
+import SellerLoginComp from "./components/login/SellerLoginComp";
 import UserSignUpComp from "./components/signup/UserSignUpComp";
 import SellerSignupComp from "./components/signup/SellerSignupComp";
 import ProductListForSellerComp from "./components/ProductListForSeller/ProductListForSellerComp";
-import UserPreviousOrdersComp from "./components/UserPreviousOrdersComp";
-import CheckoutPageComp from "./components/CheckoutPageComp";
+import UserPreviousOrdersComp from "./components/ConsumerPreviousOrders/UserPreviousOrdersComp";
+import CheckoutPageComp from "./components/CheckoutPage/CheckoutPageComp";
 import AddProductForSeller from "./components/AddProductForSeller";
 import AddCompanyComp from "./components/AddCompanyComp";
-import ShoppingCartComp from "./components/ShoopingCart";
+import ShoppingCartComp from "./components/ShoppingCart/ShoopingCart";
 import ProductListUnified from "./components/ProductListForConsumer/ProductListUnified";
-import CompanyProductListToBuyForUserComp from "./components/CompanyProductListToBuyForUserComp";
-//import ProductListByCategoryComp from "./components/ProductListByCategoryComp";
+
 import { Component } from "react";
 import axios from "axios";
-import OrderDetailsPage from "./components/OrderDetailsPage";
-import LogOutComponent from "./components/LogOutComponent";
-import SignUpSuccess from "./components/SignUpSuccess";
+import OrderDetailsPage from "./components/OrderDetails/OrderDetailsPage";
+import LogOutComponent from "./components/StaticComponents/LogOutComponent";
+import SignUpSuccess from "./components/StaticComponents/SignUpSuccess";
 
 //this is a special wrapper component that allows passing a prop to a router component
 //this also retains the component's capability to receive location prop
@@ -178,7 +177,7 @@ class App extends Component{
         })
     }
     getSellerPK(){
-        if (Object.keys(this.state.user) !=0){
+        if (Object.keys(this.state.user) !==0){
             if ('seller' in this.state.user){
                 const seller = this.state.user.seller
                 return seller.pk
@@ -231,7 +230,6 @@ class App extends Component{
                                    //         // search={props.location.search}
                                    // />)}
                             />
-                            <Route exact path="/productlistbycompany" component={CompanyProductListToBuyForUserComp}/>
                             {/*<Route exact path="/productlistbycategory/" component={SellerProductsListToBuyForUserComp}/>*/}
                             <Route exact path="/orderdetails/:id" component={OrderDetailsPage}/>
                             <Route exact path="/logout"
