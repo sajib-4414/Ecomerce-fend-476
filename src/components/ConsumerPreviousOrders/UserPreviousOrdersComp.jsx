@@ -8,12 +8,13 @@ class UserPreviousOrdersComp extends Component{
         super(props);
 
         this.state = {
-            prevOrders:[]
+            prevOrders:[],
+            buyerId:this.props.match.params.user_id,
         };
     }
     componentDidMount() {
         axios
-            .get(global.config.bkend.url+"/order-orderlines-by-user/1/")
+            .get(global.config.bkend.url+"/order-orderlines-by-user/"+this.state.buyerId+"/")
             .then(res => {
                 console.log(res.data);
                 this.setState({prevOrders:res.data})

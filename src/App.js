@@ -185,6 +185,15 @@ class App extends Component{
         }
         return ""
     }
+    getBuyerId(){
+        if (Object.keys(this.state.user) !==0){
+            if ('buyer' in this.state.user){
+                const buyer = this.state.user.buyer
+                return buyer.pk
+            }
+        }
+        return ""
+    }
     render() {
         let boundMethod = this.handleAddToCartProduct.bind(this)
         let passingProps = {
@@ -198,6 +207,7 @@ class App extends Component{
                     currentUserType={this.getCurrentUserType()}
                     currentUserName={this.getCurrentUserName()}
                     seller_pk = {this.getSellerPK()}
+                    buyer_id={this.getBuyerId()}
                     />
                     <div className="container">
 
@@ -208,7 +218,7 @@ class App extends Component{
                             <Route exact path="/userregister" component={UserSignUpComp}/>
                             <Route exact path="/sellerregister" component={SellerSignupComp}/>
                             <Route exact path="/productlistforseller/:sellerId" component={ProductListForSellerComp}/>
-                            <Route exact path="/userpreviousorders" component={UserPreviousOrdersComp}/>
+                            <Route exact path="/userpreviousorders/:user_id" component={UserPreviousOrdersComp}/>
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>

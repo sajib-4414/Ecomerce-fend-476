@@ -6,6 +6,7 @@ class PreviousOrdersListSubComp extends Component{
         return (
             this.props.orders.map(orderItem => (
                 <PrevOrdersPageOrderRow
+                    key={orderItem.pk}
                     orderItem={orderItem}
                 />
             ))
