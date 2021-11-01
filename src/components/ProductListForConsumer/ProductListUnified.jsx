@@ -119,6 +119,7 @@ class ProductListUnified extends Component{
     handleDataPropagation(pk){
         // console.log(this.props)
         this.props.handleAddToCartToAppJS(pk)
+        toast.success("Product added to cart")
     }
     showToast(){
         toast.error("Please log in to add products to cart")

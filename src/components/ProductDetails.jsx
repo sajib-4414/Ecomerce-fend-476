@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import '../css/product_details.css'
 import axios from "axios";
+import {toast, Toaster} from "react-hot-toast";
 class ProductDetails extends Component{
     state= {
         productId:this.props.match.params.productId,
@@ -25,6 +26,7 @@ class ProductDetails extends Component{
     render() {
         return(
             <div className="container">
+                <div><Toaster/></div>
                 <div className="card-details">
                     <div className="container-fliud">
                         <div className="wrapper row">
@@ -89,7 +91,16 @@ class ProductDetails extends Component{
                                 {/*    <span className="color blue"></span>*/}
                                 {/*</h5>*/}
                                 <div className="action">
-                                    <button className="add-to-cart btn btn-default" style={{marginRight:'5px'}} type="button">add to cart</button>
+                                    <button
+                                        onClick={
+                                            ()=> {
+                                                this.props.handleAddToCartToAppJS(this.state.product.pk)
+                                                toast.success("Product added to cart")
+                                            }
+                                        }
+                                        className="add-to-cart btn btn-default"
+                                            style={{marginRight:'5px'}}
+                                            type="button">add to cart</button>
                                     <button className="like btn btn-default" type="button"><span
                                         className="fa fa-heart"></span></button>
                                 </div>

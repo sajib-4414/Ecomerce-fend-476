@@ -223,7 +223,9 @@ class App extends Component{
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
-                            <Route exact path="/productdetails/:productId" component={ProductDetails}/>
+                            <Route exact path="/productdetails/:productId"
+                                   component={AddPropsToRoute(ProductDetails, passingProps)}
+                                   />
                             <Route exact path="/shoppingcart"
                                    render={(props) => (
                                        <ShoppingCartComp

@@ -63,7 +63,7 @@ class NavComp extends Component{
                         this.props.currentUserType=="buyer"?
                             <React.Fragment>
                                 <Link className='p-2 text-dark' to={"/userpreviousorders/"+this.props.buyer_id+"/"}>My Orders</Link>
-                                <Link className="btn" to="shoppingcart">
+                                <Link className="btn" to="/shoppingcart">
                                     <i className="fa fa-shopping-cart"></i> Cart <span
 
                                     className="badge badge-pill badge-danger">{this.props.cartitemquantity>0?this.props.cartitemquantity :""}</span>
