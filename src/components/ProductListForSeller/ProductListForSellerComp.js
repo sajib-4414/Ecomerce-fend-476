@@ -68,7 +68,7 @@ class ProductListSellerComp extends Component{
     //
     // }
     //static contextType =App.ThemeContext;
-    componentDidMount() {
+    fetchProductsAndUpdateState(){
         const url = global.config.bkend.url+"/products-by-seller/"+this.state.sellerId+"/"
         axios
             .get(url)
@@ -79,6 +79,10 @@ class ProductListSellerComp extends Component{
                 console.log(val)
                 // }
             })
+    }
+    componentDidMount() {
+        this.fetchProductsAndUpdateState()
+
     }
     // componentWillUnmount() {
     //     this._isMounted = false;
@@ -102,6 +106,11 @@ class ProductListSellerComp extends Component{
     //     toast.error("Please log in to add products to cart")
     //     // toast("Please log in to add products to cart")
     // }
+    handleDeleteProduct(){
+        //refresh the productlist
+        // alert("i am notified about the product delete")
+        this.fetchProductsAndUpdateState()
+    }
     render() {
         return(
             <div className="row">
@@ -119,11 +128,13 @@ class ProductListSellerComp extends Component{
                                         <th>Added date</th>
                                         <th>Item price</th>
                                         <th>Quantity available</th>
+                                        <th>Action</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <ProductListForSellerSubListComp
                                         products={this.state.products}
+                                        notifyDelete={this.handleDeleteProduct.bind(this)}
                                         // handleCartAddToParent = { this.handleDataPropagation.bind(this)}
                                         // handleShowToast={this.showToast.bind(this)}
                                     />

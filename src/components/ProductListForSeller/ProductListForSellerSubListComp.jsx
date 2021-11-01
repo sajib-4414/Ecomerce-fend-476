@@ -30,6 +30,7 @@ class ProductListForSellerSubListComp extends Component{
                     product={product}
                     // handleCartAdd={this.handleAddingToCartToListComp.bind(this)}
                     key={product.pk}
+                    deleteHandler={this.props.notifyDelete}
 
                     // xyz={this.props.delTodo}
                     // addTodo={this.props.addTodo}

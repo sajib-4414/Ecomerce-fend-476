@@ -11,6 +11,6 @@ module.exports = global.config = {
     // other global config variables you wish
 
     bkend:{
-        url:remote
+        url:local
     }
 };
