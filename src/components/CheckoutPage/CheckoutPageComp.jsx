@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import '../../css/usercheckout-form-validation.css'
 import axios from "axios";
 import CheckoutPageProductsListComp from "./CheckoutPageProductsListComp";
+import {toast, Toaster} from "react-hot-toast";
 
 class CheckoutPageComp extends Component{
     empty_error_list = {
@@ -10,12 +11,23 @@ class CheckoutPageComp extends Component{
         billing_email:"Please enter a valid email address for shipping updates.",
         billing_contact_number:"Please enter a valid contact number for shipping updates.",
     }
+    empty_address_error_list = {
+        street_address: "Street address cannot be left empty",
+        province: "Province name cannot be left empty",
+        city: "City cannot be left empty",
+        zipcode: "Zipcode cannot be left empty"
+    }
     constructor(props) {
         super(props);
 
         this.state = {
             profile:{},
-            address:{},
+            address:{
+                street_address:"",
+                province:"",
+                city:"",
+                zipcode:""
+            },
             cartlines:[],
             totalPrice:0,
             total_items:0,
@@ -31,8 +43,13 @@ class CheckoutPageComp extends Component{
                 billing_lastname:"",
                 billing_email:"",
                 billing_contact_number:"",
+                street_address:"",
+                provice:"",
+                city:"",
+                zipcode:"",
                 form_total_error:""
-            }
+            },
+            is_address_not_null:false
         };
     }
 
@@ -87,83 +104,137 @@ class CheckoutPageComp extends Component{
 
     }
     async componentDidMount() {
-        const [profileResponse, cartLinesResponse] = await Promise.all([
-            axios.get(global.config.bkend.url+"/buyers/1/"),
-            axios.get(global.config.bkend.url+"/cart-carlines-by-user/1/")
-        ]);
-        //console.log("printing profile response data")
-        //console.log(profileResponse.data)
-        this.setState({
-            profile: profileResponse.data,
-            address:profileResponse.data.address,
-            cartlines: cartLinesResponse.data.cartlines,
-            totalPrice:this.getTotalPrice(cartLinesResponse.data.cartlines),
-            total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines),
-            total_shipping_cost:this.getShippingCost(cartLinesResponse.data.cartlines)
-        });
-        this.setFormDataStates(profileResponse.data,profileResponse.data.address)
-    }
-    handleOrderSubmit(formEvent){
-        formEvent.preventDefault()
+        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+        if(retrievedUser !==null){
+            if('buyer' in retrievedUser){
+                const buyer =retrievedUser.buyer
+                const [profileResponse, cartLinesResponse] = await Promise.all([
+                    axios.get(global.config.bkend.url+"/buyers/"+buyer.pk+"/"),
+                    axios.get(global.config.bkend.url+"/cart-carlines-by-user/"+buyer.pk+"/")
+                ]);
+                //console.log("printing profile response data")
+                //console.log(profileResponse.data)
 
-        //check empty fields and forcefully assign errors
-        const all_form_data = this.state.form_data
-        let errors = {}
-        for (var key in all_form_data) {
-            if (all_form_data.hasOwnProperty(key)) {
-                if (all_form_data[key] === ""){
-                    switch (key){
-                        case 'billing_firstname':
-                            errors[key]= "Valid first name is required."
-                            break
-                        case 'billing_lastname':
-                            errors[key]= "Valid last name is required."
-                            break
-                        case 'billing_email':
-                            errors[key]= "Please enter a valid email address for shipping updates."
-                            break
-                        case 'billing_contact_number':
-                            errors[key]= "Please enter a valid contact number for shipping updates."
-                        default:
-                    }
+                if(profileResponse.data.address === null){
+                    this.setState({...this.state,
+                        profile: profileResponse.data,
+                        cartlines: cartLinesResponse.data.cartlines,
+                        totalPrice:this.getTotalPrice(cartLinesResponse.data.cartlines),
+                        total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines),
+                        total_shipping_cost:this.getShippingCost(cartLinesResponse.data.cartlines)
+                    });
+                    this.setFormDataStates(profileResponse.data,profileResponse.data.address)
+                }
+                else{
+                    this.setState({
+                        is_address_not_null:true,
+                        profile: profileResponse.data,
+                        address:profileResponse.data.address,
+                        cartlines: cartLinesResponse.data.cartlines,
+                        totalPrice:this.getTotalPrice(cartLinesResponse.data.cartlines),
+                        total_items:this.getTotalItemsQuantity(cartLinesResponse.data.cartlines),
+                        total_shipping_cost:this.getShippingCost(cartLinesResponse.data.cartlines)
+                    });
+                    this.setFormDataStates(profileResponse.data,profileResponse.data.address)
                 }
 
             }
         }
 
-        let isAnyErrorFound = false
-        // delete errors.form_total_error
-        for (var key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                    errors['form_total_error'] = 'Please correct all the errors before submitting'
-                    this.setState({...this.state,form_errors:{...this.state.form_errors,...errors}})
-                    isAnyErrorFound = true
-                    break
+    }
+    handleOrderSubmit(formEvent){
+        formEvent.preventDefault()
+        //check if a user is logged in
+        var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+        let buyer = null
+        if(retrievedUser!==null){
+            if ('buyer' in retrievedUser){
+                buyer = retrievedUser.buyer
+            }
+            else{
+                toast.error("Please log in as a user to complete the checkout")
+                return;
             }
         }
+        else{
+            toast.error("Please log in as a user to complete the checkout")
+            return
+        }
+
+        //check empty fields and forcefully assign errors
+        const all_form_data = {...this.state.form_data,...this.state.address}
+        let errors = {}
+        for (var key in all_form_data) {
+            if (all_form_data[key] === ""){
+                if(key in this.empty_address_error_list){
+                    errors[key]= this.empty_address_error_list[key]
+                }
+                else{
+                    errors[key]= this.empty_error_list[key]
+                }
+            }
+
+
+        }
+
+        let isAnyErrorFound = false
+        if(Object.keys(errors).length !==0){
+            //there is some error found
+            errors['form_total_error'] = 'Please correct all the errors before submitting'
+            this.setState({...this.state,form_errors:{...this.state.form_errors,...errors}})
+            isAnyErrorFound = true
+        }
+        // // delete errors.form_total_error
+        // for (var key in errors) {
+        //     if (errors[key] !=="") {
+        //
+        //             break
+        //     }
+        // }
         //alert("submitted"+isAnyErrorFound)
 
         if (!isAnyErrorFound) {
             this.setState({...this.state,form_errors:{form_total_error:""}})
-            axios
-                .post(global.config.bkend.url+"/orders/", {
-                    buyer_user_id:1,
-                    value:this.getTotalPrice(this.state.cartlines),
-                    billing_firstname:this.state.form_data.billing_firstname,
-                    billing_lastname:this.state.form_data.billing_lastname,
-                    billing_email:this.state.form_data.billing_email,
-                    billing_contact_number:this.state.form_data.billing_contact_number
-                })
-                .then(res => {
-                    // console.log(res);
-                    // alert("succeed creating orders")
-                    window.location.href = '/userpreviousorders';
-                    // let history = useHistory();
-                    // history.push("/userpreviousorders");
-                    // <Redirect to='/userpreviousorders'  />
+            if(this.state.is_address_not_null){
+                //means address present, no need to create an address
+                axios
+                    .post(global.config.bkend.url+"/orders/", {
+                        buyer_user_id:buyer.pk,
+                        value:this.getTotalPrice(this.state.cartlines),
+                        billing_firstname:this.state.form_data.billing_firstname,
+                        billing_lastname:this.state.form_data.billing_lastname,
+                        billing_email:this.state.form_data.billing_email,
+                        billing_contact_number:this.state.form_data.billing_contact_number
+                    })
+                    .then(res => {
+                        window.location.href = '/userpreviousorders/'+buyer.pk+"/";
+                    });
+            }
+            else{
+                //creating also an address for the user
+                //first update the address for the user
+                axios
+                    .put(global.config.bkend.url+"/buyers/"+buyer.pk+"/", {
+                        address:this.state.address
+                    })
+                    .then(response => {
+                       //now create the order
+                        axios
+                            .post(global.config.bkend.url+"/orders/", {
+                                buyer_user_id:buyer.pk,
+                                value:this.getTotalPrice(this.state.cartlines),
+                                billing_firstname:this.state.form_data.billing_firstname,
+                                billing_lastname:this.state.form_data.billing_lastname,
+                                billing_email:this.state.form_data.billing_email,
+                                billing_contact_number:this.state.form_data.billing_contact_number
+                            })
+                            .then(res => {
+                                window.location.href = '/userpreviousorders/'+buyer.pk+"/";
+                            });
+                    });
+            }
+            //alert("From all ok")
 
-                });
-            //now submit the form
 
         }
 
@@ -174,9 +245,55 @@ class CheckoutPageComp extends Component{
 
 
     }
+    handleAddressChange= event=>{
+        const val = event.target.value
+        const target = event.target.name
+        if(val ===""){
+            this.setState({...this.state,
+                address:{...this.state.address,[target]:""},
+                form_errors:{...this.state.form_errors,[target]:this.empty_address_error_list[target]}})
+        }
+        else{
+            this.setState({...this.state,
+                address:{...this.state.address,[target]:val},
+                form_errors:{...this.state.form_errors,[target]:""}})
+        }
+        // switch (target){
+        //     case 'street_address':
+        //         if(val ===""){
+        //             this.setState({...this.state,
+        //                 address:{...this.state.address,street_address:""},
+        //                 form_errors:{...this.state.form_errors,[target]:this.empty_address_error_list[target]}})
+        //         }
+        //         else{
+        //             this.setState({...this.state,
+        //                 address:{...this.state.address,street_address:val},
+        //                 form_errors:{...this.state.form_errors,[target]:""}})
+        //         }
+        //         break
+        //     case 'province':
+        //         if(val ===""){
+        //             this.setState({...this.state,
+        //                 address:{...this.state.address,street_address:""},
+        //                 form_errors:{...this.state.form_errors,[target]:this.empty_address_error_list[target]}})
+        //         }
+        //         else{
+        //             this.setState({...this.state,
+        //                 address:{...this.state.address,street_address:val},
+        //                 form_errors:{...this.state.form_errors,[target]:""}})
+        //         }
+        //         break
+        //     case 'city':
+        //         break
+        //     case 'zipcode':
+        //         break
+        // }
+        // alert("Hi am address change event")
+    }
     render() {
         return(
             <div className="width-shrink">
+                <div><Toaster/></div>
                 <div className="py-5 text-center">
                         <h2>Checkout </h2>
                 </div>
@@ -258,61 +375,98 @@ class CheckoutPageComp extends Component{
                                 {/*    */}
                                 {/*</div>*/}
                             </div>
-
-                            <div className="mb-3">
-                                {/*<label htmlFor="address">Create a new address</label>*/}
-
-
-                                {/*<Select options={this.options} />*/}
-                                <br/>
-                                <label htmlFor="address2">Address</label>
-                                <input type="text" name="street_address" value={this.state.address.street_address} className="form-control" id="address" placeholder="1234 Main St"
-                                       disabled/>
-                                    <div className="invalid-feedback">
-                                        Please enter your shipping address.
-                                    </div>
-                            </div>
-
-                            {/*<div className="mb-3">*/}
-                            {/*    <label htmlFor="address2">Address line 2 <span*/}
-                            {/*        className="text-muted">(Optional)</span></label>*/}
-                            {/*    <input type="text" className="form-control" id="address2"*/}
-                            {/*           placeholder="Apartment or suite"/>*/}
-                            {/*</div>*/}
-
-                            <div className="row">
-                                <div className="col-md-5 mb-3">
-                                    <label htmlFor="country">Province</label>
-                                    <input type="text" name="province" value={this.state.address.province} className="form-control" id="address" placeholder="1234 Main St"
-                                           disabled/>
-                                    {/*<select className="custom-select d-block w-100" id="country" required="">*/}
-                                    {/*    <option value="">Choose...</option>*/}
-                                    {/*    <option>United States</option>*/}
-                                    {/*</select>*/}
-                                    <div className="invalid-feedback">
-                                        Please select a valid province.
-                                    </div>
-                                </div>
-                                <div className="col-md-4 mb-3">
-                                    <label htmlFor="state">City</label>
-                                    <input type="text" name="city" value={this.state.address.city} className="form-control" id="address" placeholder="1234 Main St"
-                                           disabled/>
-                                    {/*<select className="custom-select d-block w-100" id="state" required="">*/}
-                                    {/*    <option value="">Choose...</option>*/}
-                                    {/*    <option>California</option>*/}
-                                    {/*</select>*/}
-                                    <div className="invalid-feedback">
-                                        Please provide a valid state.
-                                    </div>
-                                </div>
-                                <div className="col-md-3 mb-3">
-                                    <label htmlFor="zip">Zip</label>
-                                    <input type="text" name="zipcode" className="form-control" value={this.state.address.zipcode} id="zip" placeholder="" disabled/>
+                            {this.state.is_address_not_null?
+                                <React.Fragment>
+                                    <h4 htmlFor="address">Your address</h4>
+                                    <div className="mb-3">
+                                        <label htmlFor="address2">Street Address</label>
+                                        <input type="text" name="street_address" value={this.state.address.street_address} className="form-control" id="address"
+                                               disabled/>
                                         <div className="invalid-feedback">
-                                            Zip code required.
+                                            Please enter your shipping address.
                                         </div>
-                                </div>
-                            </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-5 mb-3">
+                                            <label htmlFor="country">Province</label>
+                                            <input type="text" name="province" value={this.state.address.province} className="form-control" id="address" placeholder="1234 Main St"
+                                                   disabled/>
+                                            <div className="invalid-feedback">
+                                                Please select a valid province.
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4 mb-3">
+                                            <label htmlFor="state">City</label>
+                                            <input type="text" name="city" value={this.state.address.city} className="form-control" id="address" placeholder="1234 Main St"
+                                                   disabled/>
+                                            <div className="invalid-feedback">
+                                                Please provide a valid state.
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3 mb-3">
+                                            <label htmlFor="zip">Zip</label>
+                                            <input type="text" name="zipcode" className="form-control" value={this.state.address.zipcode} id="zip" placeholder="" disabled/>
+                                            <div className="invalid-feedback">
+                                                Zip code required.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </React.Fragment>
+
+                                :
+                                <React.Fragment>
+                                    <h4 htmlFor="address">Create a new address</h4>
+                                    <div className="mb-3">
+                                        <label htmlFor="address2">Street Address</label>
+                                        <input type="text" name="street_address"
+                                               onChange={this.handleAddressChange.bind(this)}
+                                               value={this.state.address.street_address}
+                                               className="form-control" id="address" placeholder="Write your street address here"
+                                               />
+                                        <div  className="small text-danger">
+                                            {this.state.form_errors.street_address}
+                                        </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-md-5 mb-3">
+                                            <label htmlFor="country">Province</label>
+                                            <input type="text" name="province"
+                                                   onChange={this.handleAddressChange.bind(this)}
+                                                   value={this.state.address.province}
+                                                   className="form-control" id="address" placeholder="Write Province name"
+                                                   />
+                                            <div  className="small text-danger">
+                                                {this.state.form_errors.province}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-4 mb-3">
+                                            <label htmlFor="state">City</label>
+                                            <input type="text"
+                                                   name="city"
+                                                   onChange={this.handleAddressChange.bind(this)}
+                                                   value={this.state.address.city}
+                                                   className="form-control" id="address"
+                                                   placeholder="Write city name"
+                                                   />
+                                            <div  className="small text-danger">
+                                                {this.state.form_errors.city}
+                                            </div>
+                                        </div>
+                                        <div className="col-md-3 mb-3">
+                                            <label htmlFor="zip">Zip</label>
+                                            <input type="text" name="zipcode"
+                                                   className="form-control"
+                                                   onChange={this.handleAddressChange.bind(this)}
+                                                   value={this.state.address.zipcode}
+                                                   id="zip" placeholder="Write zipcode" />
+                                            <div  className="small text-danger">
+                                                {this.state.form_errors.zipcode}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </React.Fragment>
+
+                            }
 
                                     <h4 className="mb-3">Payment</h4> <span>Cash on Delivery (COD)</span>
 
