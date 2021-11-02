@@ -118,7 +118,7 @@ class NavComp extends Component{
                             </Dropdown.Item>
                             <Dropdown.Item >
                                 {this.props.currentUserType=="seller"?
-                                    <Link to="/editsellerprofile">Edit Profile</Link>
+                                    <Link to="/sellerregister?edit=True">Edit Profile</Link>
                                     :
                                     <Link to="/userregister?edit=True">Edit Profile</Link>
                                 }

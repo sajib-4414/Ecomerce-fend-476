@@ -155,48 +155,32 @@ class UserSignUpComp extends Component{
             delete all_form_data.errors;
             delete all_form_data.edit_params;
 
-            // this.state.form_data
-            // let errors = {}
-            // for (var key in all_form_data) {
-            //     if (all_form_data.hasOwnProperty(key)) {
-            //         if (all_form_data[key] === ""){
-            //             errors[key] = this.empty_error_list[key]
-            //         }
-            //
-            //     }
-            // }
-            //now let's check for validation errors
-            // if(this.state.password !== ""){
-            //     if(!this.validatePassword(this.state.password)){
-            //         errors['password'] = this.validation_error_list['password']
-            //     }
-            // }
-            // if (this.state.password !== "" && this.state.confirmPassword !== ""){
-            //     if (this.state.password !== this.state.confirmPassword){
-            //         errors['confirmPassword'] = this.validation_error_list['confirmPassword']
-            //     }
-            // }
-            // if(this.state.email !==""){
-            //     if(!this.validateEmail(this.state.email)){
-            //         errors['email'] = this.validation_error_list['email']
-            //     }
-            // }
-
-            // let isAnyErrorFound = false
-            // delete errors.form_total_error
             let errors_copy = jQuery.extend({},  this.state.errors)
+            for (var key in all_form_data) {
+                if (all_form_data[key] === ""){
+                    errors_copy[key] = this.empty_error_list[key]
+                }
+            }
             if(!this.state.edit_params.want_to_change_password_too){
                 delete errors_copy.password
                 delete errors_copy.confirmPassword
                 delete errors_copy.form
-
             }
+            // console.log("after ifneeded modification errors are")
+            // console.log(errors_copy)
+            let flag=false
             for (var key in errors_copy) {
                 if(errors_copy[key] !== ""){
-                    this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['form']}})
+                    errors_copy['form'] = this.validation_error_list['form']
+                    // this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['form']}})
+                    flag=true
                     break
-                    return;
+                    // return;
                 }
+            }
+            if (flag){
+                this.setState({...this.state,errors:{...this.state.errors,...errors_copy}})
+                return;
             }
 
             this.setState({...this.state,errors:{...this.state.errors,form:""}})
@@ -387,14 +371,17 @@ class UserSignUpComp extends Component{
                                     {this.state.errors.username}
                                 </div>
                             </div>
-                            <div className='form-inline'>
-                                <input type="checkbox" id="checkbox" style={{marginRight:'5px'}}
-                                       onChange={event => {
-                                           this.setState({...this.state,edit_params:{...this.state.edit_params,want_to_change_password_too:event.target.checked}})
-                                       }}
-                                       id="check3"/>
-                                <label htmlFor="check3">Change Password</label>
-                            </div>
+                            {this.state.edit_params.is_edit_user?
+                                <div className='form-inline'>
+                                    <input type="checkbox" id="checkbox" style={{marginRight:'5px'}}
+                                           onChange={event => {
+                                               this.setState({...this.state,edit_params:{...this.state.edit_params,want_to_change_password_too:event.target.checked}})
+                                           }}
+                                           id="check3"/>
+                                    <label htmlFor="check3">Change Password</label>
+                                </div>
+                                :""
+                            }
 
 
                                 {this.state.edit_params.is_edit_user && this.state.edit_params.want_to_change_password_too?
@@ -481,9 +468,14 @@ class UserSignUpComp extends Component{
                                     {this.state.edit_params.is_edit_user?"Confirm Edit":"Register"}
                                 </button>
                             </div>
-                            <div className="login-register">
-                                <Link  to="/usersignin">Login</Link>
-                            </div>
+                            {this.state.edit_params.is_edit_user?"":
+                                <div className="login-register">
+                                    <Link  to="/usersignin">Login</Link>
+                                </div>
+                            }
+                            {/*<div className="login-register">*/}
+                            {/*    <Link  to="/usersignin">Login</Link>*/}
+                            {/*</div>*/}
                         </form>
                     </div>
             </React.Fragment>
