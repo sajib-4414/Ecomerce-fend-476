@@ -83,9 +83,9 @@ class NavComp extends Component{
                             <React.Fragment>
                                 <Link className='p-2 text-dark' to={"/userpreviousorders/"+this.props.buyer_id+"/"}>My Orders</Link>
                                 <Link className="btn" to="/shoppingcart">
-                                    <i className="fa fa-shopping-cart"></i> Cart <span
-
-                                    className="badge badge-pill badge-danger">{this.props.cartitemquantity>0?this.props.cartitemquantity :""}</span>
+                                    <i className="fa fa-shopping-cart"></i>
+                                    Cart
+                                    <span className="badge badge-pill badge-danger">{this.props.cartitemquantity>0?this.props.cartitemquantity :""}</span>
                                 </Link>
                             </React.Fragment>
 
@@ -115,6 +115,14 @@ class NavComp extends Component{
                         <Dropdown.Menu>
                             <Dropdown.Item >
                                 <Link to="/logout">Logout</Link>
+                            </Dropdown.Item>
+                            <Dropdown.Item >
+                                {this.props.currentUserType=="seller"?
+                                    <Link to="/sellerregister?edit=True">Edit Profile</Link>
+                                    :
+                                    <Link to="/userregister?edit=True">Edit Profile</Link>
+                                }
+
                             </Dropdown.Item>
                             {/*<Dropdown.Item href="#/action-2">*/}
                             {/*    <Link to="/sellersignin">*/}

@@ -3,6 +3,7 @@ import '../../css/usersignup.css'
 import {Link} from "react-router-dom";
 import axios from "axios";
 import jQuery from 'jquery';
+import $ from 'jquery'
 class UserSignUpComp extends Component{
     empty_error_list = {
         email:"Email cannot be left empty",
@@ -36,8 +37,39 @@ class UserSignUpComp extends Component{
             username:"",
             confirmPassword:"",
             form:""
+        },
+        edit_params:{
+            is_edit_user:false,
+            edit_user:{},
+            want_to_change_password_too:false
         }
     }
+    componentDidMount() {
+        const search_param_string = this.props.location.search
+        if(search_param_string.length ===0){
+            //there was no argument passed
+        }
+        else if(search_param_string.includes("?edit=True")){
+            //means editing the user
+            //check if anyone is logged in
+            var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+            if(retrievedUser !==null){
+                if('buyer' in retrievedUser) {
+                    const buyer = retrievedUser.buyer
+                    this.setState({
+                        ...this.state,
+                        edit_params:{...this.state.edit_params,edit_user:buyer,
+                            is_edit_user:true},
+                        email:buyer.email,
+                        username:buyer.username,
+                        first_name:buyer.first_name,
+                        last_name:buyer.last_name
+                    })
+                }
+            }
+        }
+    }
+
     validateEmail(email) {
         const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(String(email).toLowerCase());
@@ -113,58 +145,115 @@ class UserSignUpComp extends Component{
     }
 
     handleFormSubmission(formEvent){
-        // alert("I am here submited")
         formEvent.preventDefault()
-        // console.log(this.state)
-        // return;
 
+        //check is for edit or new
+        if(this.state.edit_params.is_edit_user){
+            //for editing user
+            //check empty fields and forcefully assign errors
+            const all_form_data = jQuery.extend({},  this.state)
+            delete all_form_data.errors;
+            delete all_form_data.edit_params;
 
-        //check empty fields and forcefully assign errors
-        const all_form_data = jQuery.extend({},  this.state)
-        delete all_form_data.errors;
+            let errors_copy = jQuery.extend({},  this.state.errors)
+            for (var key in all_form_data) {
+                if (all_form_data[key] === ""){
+                    errors_copy[key] = this.empty_error_list[key]
+                }
+            }
+            if(!this.state.edit_params.want_to_change_password_too){
+                delete errors_copy.password
+                delete errors_copy.confirmPassword
+                delete errors_copy.form
+            }
+            // console.log("after ifneeded modification errors are")
+            // console.log(errors_copy)
+            let flag=false
+            for (var key in errors_copy) {
+                if(errors_copy[key] !== ""){
+                    errors_copy['form'] = this.validation_error_list['form']
+                    // this.setState({...this.state,errors:{...this.state.errors,form:this.validation_error_list['form']}})
+                    flag=true
+                    break
+                    // return;
+                }
+            }
+            if (flag){
+                this.setState({...this.state,errors:{...this.state.errors,...errors_copy}})
+                return;
+            }
+
+            this.setState({...this.state,errors:{...this.state.errors,form:""}})
+            const payload = {
+                first_name:this.state.first_name,
+                last_name:this.state.last_name,
+            }
+            if(this.state.edit_params.want_to_change_password_too){
+                payload['password'] = this.state.password
+            }
+            axios
+                .put(global.config.bkend.url+"/buyers/"+this.state.edit_params.edit_user.pk+"/", payload)
+                .then(response => {
+                    // const user = response.data
+                    // localStorage.setItem('currentUser', JSON.stringify(user));
+                    var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
+                    retrievedUser.buyer = response.data
+                    localStorage.setItem('currentUser', JSON.stringify(retrievedUser));
+                    window.location.href = '/';
+                })
+                .catch(errors=>{
+                    console.log(errors.response)
+                    const error_response = errors.response
+                    if(error_response.status === 400){
+                        this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
+                    }
+                });
+        }
+        else{
+            //for creating new user
+            //check empty fields and forcefully assign errors
+            const all_form_data = jQuery.extend({},  this.state)
+            delete all_form_data.errors;
+            delete all_form_data.edit_params;
 
             // this.state.form_data
-        let errors = {}
-        for (var key in all_form_data) {
-            if (all_form_data.hasOwnProperty(key)) {
-                if (all_form_data[key] === ""){
-                    errors[key] = this.empty_error_list[key]
+            let errors = {}
+            for (var key in all_form_data) {
+                if (all_form_data.hasOwnProperty(key)) {
+                    if (all_form_data[key] === ""){
+                        errors[key] = this.empty_error_list[key]
+                    }
+
                 }
+            }
+            //now let's check for validation errors
+            if(this.state.password !== ""){
+                if(!this.validatePassword(this.state.password)){
+                    errors['password'] = this.validation_error_list['password']
+                }
+            }
+            if (this.state.password !== "" && this.state.confirmPassword !== ""){
+                if (this.state.password !== this.state.confirmPassword){
+                    errors['confirmPassword'] = this.validation_error_list['confirmPassword']
+                }
+            }
+            if(this.state.email !==""){
+                if(!this.validateEmail(this.state.email)){
+                    errors['email'] = this.validation_error_list['email']
+                }
+            }
 
-            }
-        }
-        //now let's check for validation errors
-        if(this.state.password !== ""){
-            if(!this.validatePassword(this.state.password)){
-                errors['password'] = this.validation_error_list['password']
-            }
-        }
-        if (this.state.password !== "" && this.state.confirmPassword !== ""){
-            if (this.state.password !== this.state.confirmPassword){
-                errors['confirmPassword'] = this.validation_error_list['confirmPassword']
-            }
-        }
-        if(this.state.email !==""){
-            if(!this.validateEmail(this.state.email)){
-                errors['email'] = this.validation_error_list['email']
-            }
-        }
-
-        let isAnyErrorFound = false
-        // delete errors.form_total_error
-        for (var key in errors) {
-            if (errors.hasOwnProperty(key)) {
+            let isAnyErrorFound = false
+            // delete errors.form_total_error
+            for (var key in errors) {
                 errors['form'] = 'Please correct all the errors before submitting'
                 this.setState({...this.state,errors:{...this.state.errors,...errors}})
                 isAnyErrorFound = true
                 break
             }
-        }
-        // alert("any error found="+isAnyErrorFound)
-        if(isAnyErrorFound){
-            return
-        }
-        else {
+            // alert("any error found="+isAnyErrorFound)
+            if(isAnyErrorFound) return
+
             this.setState({...this.state,errors:{...this.state.errors,form:""}})
             axios
                 .post(global.config.bkend.url+"/buyers/", {
@@ -184,8 +273,11 @@ class UserSignUpComp extends Component{
                         this.setState({...this.state,errors:{...this.state.errors,form:error_response.data.email}})
                     }
                 });
-
         }
+
+
+
+
 
 
 
@@ -195,7 +287,12 @@ class UserSignUpComp extends Component{
         return(
             <React.Fragment>
                 <div className="panel-title text-center">
-                    <h1 className="title">Sign Up</h1>
+                    {this.state.edit_params.is_edit_user?
+                        <h1 className="title">Edit your profile</h1>
+                        :
+                        <h1 className="title">Sign Up</h1>
+                    }
+
                     <hr/>
                 </div>
                 <div className="main-login main-center">
@@ -235,9 +332,16 @@ class UserSignUpComp extends Component{
                                 <div className="cols-sm-10">
                                     <div className="input-group">
                                         <span className="input-group-addon"><i className="fa fa-envelope fa" aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="email" id="email"
-                                               value={this.state.email}
-                                               onChange={this.handleChange.bind(this)} placeholder="Enter your Email"/>
+                                        {this.state.edit_params.is_edit_user?
+                                            <input type="text" className="form-control" name="email" id="email"
+                                                   value={this.state.email}
+                                                   placeholder="Enter your Email" disabled/>
+                                            :
+                                            <input type="text" className="form-control" name="email" id="email"
+                                                   value={this.state.email}
+                                                   onChange={this.handleChange.bind(this)} placeholder="Enter your Email"/>
+                                        }
+
                                     </div>
                                     <div className="small text-danger">
                                         {this.state.errors.email}
@@ -251,55 +355,127 @@ class UserSignUpComp extends Component{
                                     <div className="input-group">
                             <span className="input-group-addon"><i className="fa fa-users fa"
                                                                    aria-hidden="true"/></span>
-                                        <input type="text" className="form-control" name="username" id="username"
-                                               value={this.state.username}
-                                               onChange={this.handleChange.bind(this)}  placeholder="Enter your Username"/>
+                                        {this.state.edit_params.is_edit_user?
+                                            <input type="text" className="form-control" name="username" id="username"
+                                                   value={this.state.username}
+                                                    placeholder="Enter your Username" disabled/>
+                                            :
+                                            <input type="text" className="form-control" name="username" id="username"
+                                                   value={this.state.username}
+                                                   onChange={this.handleChange.bind(this)}  placeholder="Enter your Username"/>
+                                        }
+
                                     </div>
                                 </div>
                                 <div className="small text-danger">
                                     {this.state.errors.username}
                                 </div>
                             </div>
-
-                            <div className="form-group">
-                                <label htmlFor="password" className="cols-sm-2 control-label">Password</label>
-                                <div className="cols-sm-10">
-                                    <div className="input-group">
-                                        <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
-                                        <input type="password" className="form-control" name="password" id="password"
-                                               value={this.state.password}
-                                               onChange={this.handleChange.bind(this)}  placeholder="Enter your Password"/>
-                                    </div>
-                                    <div  className="small text-danger">
-                                        {this.state.errors.password}
-                                    </div>
+                            {this.state.edit_params.is_edit_user?
+                                <div className='form-inline'>
+                                    <input type="checkbox" id="checkbox" style={{marginRight:'5px'}}
+                                           onChange={event => {
+                                               this.setState({...this.state,edit_params:{...this.state.edit_params,want_to_change_password_too:event.target.checked}})
+                                           }}
+                                           id="check3"/>
+                                    <label htmlFor="check3">Change Password</label>
                                 </div>
-                            </div>
+                                :""
+                            }
 
-                            <div className="form-group">
-                                <label htmlFor="confirm" className="cols-sm-2 control-label">Confirm Password</label>
-                                <div className="cols-sm-10">
+
+                                {this.state.edit_params.is_edit_user && this.state.edit_params.want_to_change_password_too?
+                                    <React.Fragment>
+                                        <div className="form-group">
+                                        <label htmlFor="password" className="cols-sm-2 control-label">New Password</label>
+                                        <div className="cols-sm-10">
+                                            <div className="input-group">
+                                                <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                                <input type="password" className="form-control" name="password" id="password"
+                                                       value={this.state.password}
+                                                       onChange={this.handleChange.bind(this)}  placeholder="Enter your Password"/>
+                                            </div>
+                                            <div  className="small text-danger">
+                                                {this.state.errors.password}
+                                            </div>
+                                        </div>
+                                        </div>
+                                    <div className="form-group">
+                                        <label htmlFor="confirm" className="cols-sm-2 control-label">Confirm new Password</label>
+                                        <div className="cols-sm-10">
+                                            <div className="input-group">
+                                                <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                                <input type="password" className="form-control" name="confirmPassword" id="confirm"
+                                                       value={this.state.confirmPassword}
+                                                       onChange={this.handleChange.bind(this)}
+                                                       placeholder="Confirm your Password"/>
+                                            </div>
+                                            <div className="small text-danger">
+                                                {this.state.errors.confirmPassword}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </React.Fragment>
+                                    :
+                                    ""
+                                }
+                                {this.state.edit_params.is_edit_user?
+                                    ""
+                                    :
+                                <React.Fragment>
+                                    <div className="form-group">
+                                        <label htmlFor="password" className="cols-sm-2 control-label">Password</label>
+                                        <div className="cols-sm-10">
+                                            <div className="input-group">
+                                                <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                                <input type="password" className="form-control" name="password" id="password"
+                                                       value={this.state.password}
+                                                       onChange={this.handleChange.bind(this)}  placeholder="Enter your Password"/>
+                                            </div>
+                                            <div  className="small text-danger">
+                                                {this.state.errors.password}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="form-group">
+                                    <label htmlFor="confirm" className="cols-sm-2 control-label">Confirm Password</label>
+                                    <div className="cols-sm-10">
                                     <div className="input-group">
-                                        <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
-                                        <input type="password" className="form-control" name="confirmPassword" id="confirm"
-                                               value={this.state.confirmPassword}
-                                               onChange={this.handleChange.bind(this)}
-                                               placeholder="Confirm your Password"/>
+                                    <span className="input-group-addon"><i className="fa fa-lock fa-lg" aria-hidden="true"/></span>
+                                    <input type="password" className="form-control" name="confirmPassword" id="confirm"
+                                    value={this.state.confirmPassword}
+                                    onChange={this.handleChange.bind(this)}
+                                    placeholder="Confirm your Password"/>
                                     </div>
                                     <div className="small text-danger">
-                                        {this.state.errors.confirmPassword}
+                                {this.state.errors.confirmPassword}
                                     </div>
-                                </div>
-                            </div>
+                                    </div>
+                                    </div>
+                                </React.Fragment>
+
+                                }
+
+
+
+
+
                             <div className="text-center text-danger">
                                 {this.state.errors.form}
                             </div>
                             <div className="form-group ">
-                                <button type="button" type="submit" className="btn btn-primary btn-lg btn-block login-button">Register</button>
+                                <button type="button" type="submit" className="btn btn-primary btn-lg btn-block login-button">
+                                    {this.state.edit_params.is_edit_user?"Confirm Edit":"Register"}
+                                </button>
                             </div>
-                            <div className="login-register">
-                                <Link  to="/usersignin">Login</Link>
-                            </div>
+                            {this.state.edit_params.is_edit_user?"":
+                                <div className="login-register">
+                                    <Link  to="/usersignin">Login</Link>
+                                </div>
+                            }
+                            {/*<div className="login-register">*/}
+                            {/*    <Link  to="/usersignin">Login</Link>*/}
+                            {/*</div>*/}
                         </form>
                     </div>
             </React.Fragment>
