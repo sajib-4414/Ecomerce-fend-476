@@ -68,25 +68,25 @@ class AddProductForSeller extends Component{
     setCompanyAndCategoryInState(companyResponse,categoryResponse){
         const companies = companyResponse.data
         const categories = categoryResponse.data
-        const company_array_for_state = []
-        const category_array_for_state = []
+        let company_array_for_state = []
+        let category_array_for_state = []
         let is_categories_empty = true
         let is_companies_empty = true
 
-        if (Object.keys(companies).length !=0){
+        if (Object.keys(companies).length !==0){
             //companies are not empty
             is_companies_empty = false
-            companies.map(company =>{
+            company_array_for_state = companies.map(company =>{
                 const item = {label:company.company_name, value:company.pk}
-                company_array_for_state.push(item)
+                return item
             })
         }
-        if (Object.keys(categories).length !=0){
+        if (Object.keys(categories).length !==0){
             //categories are not empty
             is_categories_empty = false
-            categories.map(category =>{
+            category_array_for_state = categories.map(category =>{
                 const item = {label:category.name, value:category.pk}
-                category_array_for_state.push(item)
+                return item
             })
         }
         //because we have to set the state once, multiple times setting state cause problem,
@@ -118,13 +118,13 @@ class AddProductForSeller extends Component{
                         const product = response.data
                         const categories = categoryListResponse.data
                         const companies = companyListResponse.data
-                        const companies_to_add = []
-                        companies.map(company=>{
-                            companies_to_add.push({value:company.pk,label:company.company_name})
+                        let companies_to_add = []
+                        companies_to_add = companies.map(company=>{
+                            return {value:company.pk,label:company.company_name}
                         })
-                        const categories_to_add = []
-                        categories.map(category=>{
-                            categories_to_add.push({value:category.pk,label:category.name})
+                        let categories_to_add = []
+                        categories_to_add = categories.map(category=>{
+                            return {value:category.pk,label:category.name}
                         })
                         //const s_company =
                         //const temp_array = []
@@ -230,8 +230,8 @@ class AddProductForSeller extends Component{
         for (var key in all_form_data) {
             if (all_form_data.hasOwnProperty(key)) {
                 if (all_form_data[key] === ""){
-                    console.log("printing error value")
-                    console.log("came here because error key is"+key)
+                    //console.log("printing error value")
+                    //console.log("came here because error key is"+key)
                     errors[key] = this.empty_error_list[key]
                 }
 
@@ -275,10 +275,8 @@ class AddProductForSeller extends Component{
                     company_id:this.state.form_data.company_id
                 })
                 .then(res => {
-                    var r = window.confirm("Product Editted successfully!\nDo you want to edit again?");
-                    if (r == true) {
-                        //do nothing
-                    } else {
+                    var response = window.confirm("Product Editted successfully!\nDo you want to edit again?");
+                    if(!response) {
                         window.location.href = '/productlistforseller/'+seller_id+'/'
                     }
 
@@ -304,10 +302,8 @@ class AddProductForSeller extends Component{
                     seller_id:seller_id
                 })
                 .then(res => {
-                    var r = window.confirm("Product Added!\nDo you want to add another product?");
-                    if (r == true) {
-                        //do nothing
-                    } else {
+                    var response = window.confirm("Product Added!\nDo you want to add another product?");
+                    if(!response) {
                         window.location.href = '/productlistforseller/'+seller_id+'/'
                     }
 
@@ -390,7 +386,7 @@ class AddProductForSeller extends Component{
 
                             <div className="mb-3">
                                 <label htmlFor="address">Choose an Category or
-                                    <Link> Create new</Link>
+                                    <Link to='/createcategory'> Create new</Link>
                                 </label>
 
                                 <Select

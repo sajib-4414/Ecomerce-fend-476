@@ -21,6 +21,7 @@ import OrderDetailsPage from "./components/OrderDetails/OrderDetailsPage";
 import LogOutComponent from "./components/StaticComponents/LogOutComponent";
 import SignUpSuccess from "./components/StaticComponents/SignUpSuccess";
 import ProductDetails from "./components/ProductDetails";
+import CategoryAddComp from "./components/CategoryAddComp";
 
 //this is a special wrapper component that allows passing a prop to a router component
 //this also retains the component's capability to receive location prop
@@ -56,9 +57,7 @@ class App extends Component{
     callCartCarLinesApiAndUpdateState(){
        // console.log("callcartcarlinesapi called")
         var retrievedUser = JSON.parse(localStorage.getItem('currentUser'));
-        if (retrievedUser === null)
-        {
-           // console.log("retrieved user is null")
+        if (retrievedUser === null) {
             return
             //no user saved
         }
@@ -78,9 +77,7 @@ class App extends Component{
                             this.setCartDataInState(response)
                         }
                     )
-                    .catch(error=>{
-
-                    })
+                    .catch()
             }
             else{
                 //this is a seller user, who does not have any cart
@@ -122,10 +119,6 @@ class App extends Component{
                         this.setCartDataInState(response)
                         // this.setState({todos:[...this.state.todos,res.data]})
                     });
-            }
-            else{
-                //seller user, he cannot have a cart
-                return;
             }
         }
 
@@ -225,6 +218,7 @@ class App extends Component{
                             <Route exact path="/checkoutpage" component={CheckoutPageComp}/>
                             <Route exact path="/addeditproduct/" component={AddProductForSeller}/>
                             <Route exact path="/addcompany" component={AddCompanyComp}/>
+                            <Route exact path="/createcategory" component={CategoryAddComp}/>
                             <Route exact path="/productdetails/:productId"
                                    component={AddPropsToRoute(ProductDetails, passingProps)}
                                    />
