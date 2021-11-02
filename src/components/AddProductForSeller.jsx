@@ -402,7 +402,7 @@ class AddProductForSeller extends Component{
 
                             <div className="mb-3">
                                 <label htmlFor="address">Choose Company or
-                                    <Link> Create new</Link>
+                                    <Link to='/addcompany'> Create new</Link>
                                 </label>
 
                                 <Select
