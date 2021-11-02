@@ -163,7 +163,9 @@ class App extends Component{
             if ('buyer' in user){
                 return user.buyer.first_name
             }
-            else return user.seller.first_name
+            else {
+                return user.seller.first_name
+            }
         }
     }
     updateCart = ()=>{
